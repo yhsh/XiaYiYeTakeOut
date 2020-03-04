@@ -1,0 +1,63 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+/**
+ * 获取当前时间
+ */
+static def getNowTime() {
+    return new Date().format("yyyy-MM-dd HH-mm-ss", TimeZone.getTimeZone("GMT+8"))
+}
+
+android {
+    signingConfigs {
+        debug {
+            storeFile file('..\\XaiYiYeTakeOut.jks')
+            storePassword '123456'
+            keyAlias = 'XaiYiYeTakeOut'
+            keyPassword '123456'
+        }
+        release {
+            storeFile file('..\\XaiYiYeTakeOut.jks')
+            storePassword '123456'
+            keyAlias = 'XaiYiYeTakeOut'
+            keyPassword '123456'
+        }
+    }
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "com.xiayiye.takeout"
+        minSdkVersion 17
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        signingConfig signingConfigs.release
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            debuggable = true
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+    applicationVariants.all { xiaYiYe5 ->
+        xiaYiYe5.outputs.all {
+            outputFileName = "外卖(Kotlin版)_v${defaultConfig.versionName}_code-${defaultConfig.versionCode}_time-${getNowTime()}_" + xiaYiYe5.name + ".apk"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+}
