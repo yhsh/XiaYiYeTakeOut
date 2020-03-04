@@ -10,7 +10,9 @@ import com.xiayiye.takeout.ui.fragment.HomeFragment
 import com.xiayiye.takeout.ui.fragment.MoreFragment
 import com.xiayiye.takeout.ui.fragment.OrderFragment
 import com.xiayiye.takeout.ui.fragment.UserFragment
+import com.xiayiye.takeout.utils.XiaYiYeUtils
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
     //添加所有页面的fragment
@@ -24,6 +26,12 @@ class MainActivity : AppCompatActivity() {
         initBottomBar()
         //默认选中第一个
         changeIndex(0)
+        //判断是否有虚拟按钮
+        val dip2px =
+            XiaYiYeUtils.getInstance().dip2px(XiaYiYeUtils.getInstance().getNavigationBarHeight())
+        if (XiaYiYeUtils.getInstance().checkDeviceHasNavigationBar()) {
+            ll_main_activity.setPadding(0, 0, 0, dip2px)
+        }
     }
 
     private fun initBottomBar() {
@@ -60,4 +68,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }

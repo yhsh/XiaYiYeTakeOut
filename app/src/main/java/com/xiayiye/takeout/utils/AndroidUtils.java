@@ -1,15 +1,4 @@
-package com.xiayiye.takeout.ui.fragment
-
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.xiayiye.takeout.R
-import com.xiayiye.takeout.ui.adapter.HomeRvAdapter
-import kotlinx.android.synthetic.main.fragment_home.*
-
+package com.xiayiye.takeout.utils;
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
  * #                                                   #
@@ -37,46 +26,36 @@ import kotlinx.android.synthetic.main.fragment_home.*
  * #                                                   #
  */
 
+import android.app.Application;
+
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/4 19:13
+ * 创建时间：2020/3/4 21:04
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：XiaYiYeTakeOut
- * 文件包名：com.xiayiye.takeout.ui.fragment
- * 文件说明：首页的fragment
+ * 文件包名：com.xiayiye.takeout.utils
+ * 文件说明：通过反射获取全局的application对象的工具类
  */
-class HomeFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_home, null)
-    }
-
-    fun setData(): ArrayList<String> {
-        val list = ArrayList<String>()
-        for (i in 0 until 100) {
-            list.add("外卖第$i 家")
-        }
-        return list
-    }
+public class AndroidUtils {
+    private static Application currentApplication;
 
     /**
-     * fragment布局初始化成功后调用的方法
+     * 通过反射获取Application对象的方法
+     *
+     * @return 返回 application俺对象
      */
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        rv_home.layoutManager = LinearLayoutManager(context)
-        val homeRvAdapter = HomeRvAdapter(context!!)
-        rv_home.adapter = homeRvAdapter
-        homeRvAdapter.setData(setData())
+    public static Application getApplicationByReflection() {
+        try {
+            if (currentApplication == null) {
+                currentApplication = (Application) Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null, (Object[]) null);
+            }
+            return currentApplication;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
