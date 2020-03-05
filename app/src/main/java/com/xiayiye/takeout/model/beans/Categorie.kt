@@ -29,7 +29,7 @@ package com.xiayiye.takeout.model.beans
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/5 18:38
+ * 创建时间：2020/3/5 20:20
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
@@ -38,9 +38,8 @@ package com.xiayiye.takeout.model.beans
  * 文件包名：com.xiayiye.takeout.model.beans
  * 文件说明：
  */
-data class ResponseData(
-    val categorieList: List<Categorie>,
-    val nearbySellerList: List<Seller>,
-    val otherSellerList: List<Seller>,
-    val promotionList: List<Promotion>
+data class Categorie(
+    val id: Int,
+    val name: String,
+    val pic: String
 )

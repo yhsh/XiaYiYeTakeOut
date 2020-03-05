@@ -11,7 +11,7 @@ import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.TextSliderView
 import com.squareup.picasso.Picasso
 import com.xiayiye.takeout.R
-import com.xiayiye.takeout.model.beans.NearbySeller
+import com.xiayiye.takeout.model.beans.Seller
 import org.jetbrains.anko.find
 
 /*
@@ -58,8 +58,8 @@ class HomeRvAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.Vi
         val TYPE_SELLER = 1
     }
 
-    private var mDatas: ArrayList<NearbySeller> = ArrayList()
-    fun setData(data: ArrayList<NearbySeller>) {
+    private var mDatas: ArrayList<Seller> = ArrayList()
+    fun setData(data: ArrayList<Seller>) {
         mDatas = data
         notifyDataSetChanged()
     }
@@ -137,13 +137,13 @@ class HomeRvAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.Vi
             sellerLogo = itemView.find(R.id.seller_logo)
         }
 
-        fun bindData(data: NearbySeller) {
+        fun bindData(data: Seller) {
             tvTittle.text = data.name
             tvHomeSale.text = data.sale
             tvHomeSendPrice.text =
                 StringBuffer("￥").append(data.sendPrice).append("起送/配送费￥").append(data.deliveryFee)
             tvHomeDistance.text = data.distance
-            ratingBar.numStars = data.score.toInt()
+            ratingBar.rating = data.score!!.toFloat()
             Picasso.with(context).load(data.icon).into(sellerLogo)
         }
     }

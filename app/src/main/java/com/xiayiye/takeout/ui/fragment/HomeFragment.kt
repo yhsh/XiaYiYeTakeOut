@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xiayiye.takeout.R
-import com.xiayiye.takeout.model.beans.NearbySeller
+import com.xiayiye.takeout.model.beans.Seller
 import com.xiayiye.takeout.presenter.HomeFragmentPresenter
 import com.xiayiye.takeout.ui.adapter.HomeRvAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -87,8 +87,8 @@ class HomeFragment : Fragment() {
         rv_home.adapter = homeRvAdapter
     }
 
-    val list = ArrayList<NearbySeller>()
-    fun homeOnSuccess(nearbySellerList: List<NearbySeller>, otherSellerList: List<NearbySeller>) {
+    val list = ArrayList<Seller>()
+    fun homeOnSuccess(nearbySellerList: List<Seller>, otherSellerList: List<Seller>) {
         list.clear()
         list.addAll(nearbySellerList)
         list.addAll(otherSellerList)

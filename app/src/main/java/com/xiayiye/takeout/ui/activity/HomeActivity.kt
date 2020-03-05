@@ -14,7 +14,7 @@ import com.xiayiye.takeout.utils.XiaYiYeUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
     //添加所有页面的fragment
     val list = listOf<Fragment>(HomeFragment(), OrderFragment(), UserFragment(), MoreFragment())
 
