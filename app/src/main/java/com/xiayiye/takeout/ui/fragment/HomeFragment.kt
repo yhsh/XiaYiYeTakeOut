@@ -2,7 +2,6 @@ package com.xiayiye.takeout.ui.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xiayiye.takeout.R
+import com.xiayiye.takeout.model.beans.NearbySeller
+import com.xiayiye.takeout.presenter.HomeFragmentPresenter
 import com.xiayiye.takeout.ui.adapter.HomeRvAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -52,8 +53,12 @@ import kotlinx.android.synthetic.main.fragment_home.*
  * 文件说明：首页的fragment
  */
 class HomeFragment : Fragment() {
+    private lateinit var homeRvAdapter: HomeRvAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //初始化P层
+        val homePresenter = HomeFragmentPresenter(this)
+        homePresenter.getHomeInfo()
     }
 
     override fun onCreateView(
@@ -78,9 +83,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_home.layoutManager = LinearLayoutManager(context)
-        val homeRvAdapter = HomeRvAdapter(context!!)
+        homeRvAdapter = HomeRvAdapter(context!!)
         rv_home.adapter = homeRvAdapter
-        homeRvAdapter.setData(setHomeData())
+    }
+
+    val list = ArrayList<NearbySeller>()
+    fun homeOnSuccess(nearbySellerList: List<NearbySeller>, otherSellerList: List<NearbySeller>) {
+        list.clear()
+        list.addAll(nearbySellerList)
+        list.addAll(otherSellerList)
+        homeRvAdapter.setData(list)
         //设置rv的滑动监听
         var sum: Int = 0
         rv_home.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -94,22 +106,12 @@ class HomeFragment : Fragment() {
                     //当小于55个高度将透明度恢复到初始透明度
                     sum = 55
                 }
-                Log.e("打印滑动高度", sum.toString())
                 ll_title_container.setBackgroundColor(Color.argb(sum, 0x31, 0x90, 0xe8))
             }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-            }
         })
-        rv_home.setOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-            }
+    }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-        })
+    fun homeOnFail() {
+
     }
 }

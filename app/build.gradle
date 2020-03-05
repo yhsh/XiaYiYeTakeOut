@@ -47,6 +47,10 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
     applicationVariants.all { xiaYiYe5 ->
         xiaYiYe5.outputs.all {
             outputFileName = "外卖(Kotlin版)_v${defaultConfig.versionName}_code-${defaultConfig.versionCode}_time-${getNowTime()}_" + xiaYiYe5.name + ".apk"
@@ -65,4 +69,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.slider:library:1.1.5@aar'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.retrofit2:retrofit:2.7.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.0'
 }

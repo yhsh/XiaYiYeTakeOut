@@ -3,10 +3,16 @@ package com.xiayiye.takeout.ui.adapter
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.RatingBar
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.daimajia.slider.library.SliderLayout
 import com.daimajia.slider.library.SliderTypes.TextSliderView
+import com.squareup.picasso.Picasso
 import com.xiayiye.takeout.R
+import com.xiayiye.takeout.model.beans.NearbySeller
+import org.jetbrains.anko.find
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -52,8 +58,8 @@ class HomeRvAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.Vi
         val TYPE_SELLER = 1
     }
 
-    private var mDatas: ArrayList<String> = ArrayList()
-    fun setData(data: ArrayList<String>) {
+    private var mDatas: ArrayList<NearbySeller> = ArrayList()
+    fun setData(data: ArrayList<NearbySeller>) {
         mDatas = data
         notifyDataSetChanged()
     }
@@ -114,9 +120,31 @@ class HomeRvAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    class SellerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bindData(data: String) {
+    inner class SellerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvTittle: TextView
+        private val tvHomeSale: TextView
+        private val tvHomeSendPrice: TextView
+        private val tvHomeDistance: TextView
+        private val ratingBar: RatingBar
+        private val sellerLogo: ImageView
 
+        init {
+            tvTittle = itemView.findViewById(R.id.tv_title)
+            tvHomeSale = itemView.findViewById(R.id.tv_home_sale)
+            tvHomeSendPrice = itemView.findViewById(R.id.tv_home_send_price)
+            tvHomeDistance = itemView.findViewById(R.id.tv_home_distance)
+            ratingBar = itemView.findViewById(R.id.ratingBar)
+            sellerLogo = itemView.find(R.id.seller_logo)
+        }
+
+        fun bindData(data: NearbySeller) {
+            tvTittle.text = data.name
+            tvHomeSale.text = data.sale
+            tvHomeSendPrice.text =
+                StringBuffer("￥").append(data.sendPrice).append("起送/配送费￥").append(data.deliveryFee)
+            tvHomeDistance.text = data.distance
+            ratingBar.numStars = data.score.toInt()
+            Picasso.with(context).load(data.icon).into(sellerLogo)
         }
     }
 }
