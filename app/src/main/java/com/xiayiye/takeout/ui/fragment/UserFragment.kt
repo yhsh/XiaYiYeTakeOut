@@ -1,11 +1,15 @@
 package com.xiayiye.takeout.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.xiayiye.takeout.R
+import com.xiayiye.takeout.model.beans.User
+import com.xiayiye.takeout.ui.activity.LoginActivity
+import kotlinx.android.synthetic.main.fragment_user.*
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -57,5 +61,35 @@ class UserFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_user, null)
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        login.setOnClickListener {
+            //跳转登录页面
+            startActivityForResult(Intent(activity, LoginActivity::class.java), 666)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 666) {
+            if (data != null) {
+                val user = (data.getSerializableExtra("user")) as User
+                println("打印用户${user.data.name}")
+                //登录成功
+                username.text = StringBuffer("欢迎您,").append(user.data.name)
+                username.visibility = View.VISIBLE
+                ll_userinfo.visibility = View.VISIBLE
+                login.visibility = View.GONE
+                phone.text = user.data.phone
+            } else {
+                //登录失败
+                username.text = ""
+                username.visibility = View.GONE
+                ll_userinfo.visibility = View.GONE
+                login.visibility = View.VISIBLE
+            }
+        }
     }
 }

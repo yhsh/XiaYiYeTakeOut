@@ -1,9 +1,14 @@
-package com.xiayiye.takeout.model.net
+package com.xiayiye.takeout.presenter
 
+import android.content.Context
 import com.xiayiye.takeout.model.beans.ResponseInfo
-import com.xiayiye.takeout.model.beans.User
+import com.xiayiye.takeout.model.net.TakeOutService
+import org.jetbrains.anko.toast
 import retrofit2.Call
-import retrofit2.http.GET
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -34,20 +39,22 @@ import retrofit2.http.GET
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/5 17:45
+ * 创建时间：2020/3/6 16:14
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：XiaYiYeTakeOut
- * 文件包名：com.xiayiye.takeout.model.net
+ * 文件包名：com.xiayiye.takeout.presenter
  * 文件说明：
  */
-interface TakeOutService {
-    //获取首页数据的接口
-    @GET("take_out_home")
-    fun getHomeInfo(): Call<ResponseInfo>
+open class NetPresenter() {
+    var takeOutService: TakeOutService
 
-    @GET("take_out_login")
-    fun login(): Call<User>
+    init {
+        val retrofit = Retrofit.Builder().baseUrl("https://getman.cn/mock/")
+            .addConverterFactory(GsonConverterFactory.create()).build()
+        takeOutService = retrofit.create(TakeOutService::class.java)
+
+    }
 }

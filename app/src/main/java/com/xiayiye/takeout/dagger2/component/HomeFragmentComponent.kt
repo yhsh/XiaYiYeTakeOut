@@ -1,9 +1,8 @@
-package com.xiayiye.takeout.model.net
+package com.xiayiye.takeout.dagger2.component
 
-import com.xiayiye.takeout.model.beans.ResponseInfo
-import com.xiayiye.takeout.model.beans.User
-import retrofit2.Call
-import retrofit2.http.GET
+import com.xiayiye.takeout.dagger2.module.HomeFragmentModule
+import com.xiayiye.takeout.ui.fragment.HomeFragment
+import dagger.Component
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -34,20 +33,16 @@ import retrofit2.http.GET
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/5 17:45
+ * 创建时间：2020/3/6 12:32
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：XiaYiYeTakeOut
- * 文件包名：com.xiayiye.takeout.model.net
+ * 文件包名：com.xiayiye.takeout.dagger2.component
  * 文件说明：
  */
-interface TakeOutService {
-    //获取首页数据的接口
-    @GET("take_out_home")
-    fun getHomeInfo(): Call<ResponseInfo>
-
-    @GET("take_out_login")
-    fun login(): Call<User>
+@Component(modules = arrayOf(HomeFragmentModule::class))
+interface HomeFragmentComponent {
+    fun inject(homeFragment: HomeFragment)
 }

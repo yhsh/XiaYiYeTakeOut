@@ -9,10 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xiayiye.takeout.R
+import com.xiayiye.takeout.dagger2.component.DaggerHomeFragmentComponent
+import com.xiayiye.takeout.dagger2.module.HomeFragmentModule
 import com.xiayiye.takeout.model.beans.Seller
 import com.xiayiye.takeout.presenter.HomeFragmentPresenter
 import com.xiayiye.takeout.ui.adapter.HomeRvAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
+import javax.inject.Inject
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -54,10 +57,15 @@ import kotlinx.android.synthetic.main.fragment_home.*
  */
 class HomeFragment : Fragment() {
     private lateinit var homeRvAdapter: HomeRvAdapter
+    @Inject
+    lateinit var homePresenter: HomeFragmentPresenter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //初始化P层
-        val homePresenter = HomeFragmentPresenter(this)
+//      homePresenter = HomeFragmentPresenter(this)
+        DaggerHomeFragmentComponent.builder().homeFragmentModule(HomeFragmentModule(this)).build()
+            .inject(this)
         homePresenter.getHomeInfo()
     }
 
@@ -95,20 +103,22 @@ class HomeFragment : Fragment() {
         homeRvAdapter.setData(list)
         //设置rv的滑动监听
         var sum: Int = 0
-        rv_home.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                sum += dy
-                if (sum >= 240) {
-                    //当超过240的高度将透明度改为完全不透明
-                    sum = 255
-                } else if (sum <= 55) {
-                    //当小于55个高度将透明度恢复到初始透明度
-                    sum = 55
+        rv_home?.let {
+            rv_home.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    sum += dy
+                    if (sum >= 240) {
+                        //当超过240的高度将透明度改为完全不透明
+                        sum = 255
+                    } else if (sum <= 55) {
+                        //当小于55个高度将透明度恢复到初始透明度
+                        sum = 55
+                    }
+                    ll_title_container.setBackgroundColor(Color.argb(sum, 0x31, 0x90, 0xe8))
                 }
-                ll_title_container.setBackgroundColor(Color.argb(sum, 0x31, 0x90, 0xe8))
-            }
-        })
+            })
+        }
     }
 
     fun homeOnFail() {
