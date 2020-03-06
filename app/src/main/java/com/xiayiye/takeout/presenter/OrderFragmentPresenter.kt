@@ -1,10 +1,10 @@
-package com.xiayiye.takeout.model.net
+package com.xiayiye.takeout.presenter
 
 import com.xiayiye.takeout.model.beans.OrderBean
-import com.xiayiye.takeout.model.beans.ResponseInfo
-import com.xiayiye.takeout.model.beans.User
+import com.xiayiye.takeout.ui.fragment.OrderFragment
 import retrofit2.Call
-import retrofit2.http.GET
+import retrofit2.Callback
+import retrofit2.Response
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -35,23 +35,30 @@ import retrofit2.http.GET
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/5 17:45
+ * 创建时间：2020/3/6 20:47
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：XiaYiYeTakeOut
- * 文件包名：com.xiayiye.takeout.model.net
+ * 文件包名：com.xiayiye.takeout.presenter
  * 文件说明：
  */
-interface TakeOutService {
-    //获取首页数据的接口
-    @GET("take_out_home")
-    fun getHomeInfo(): Call<ResponseInfo>
+class OrderFragmentPresenter(val orderFragment: OrderFragment) : NetPresenter() {
+    fun getAllOrder() {
+        takeOutService.getAllOrder().enqueue(object : Callback<OrderBean> {
+            override fun onFailure(call: Call<OrderBean>, t: Throwable) {
 
-    @GET("take_out_login")
-    fun login(): Call<User>
+            }
 
-    @GET("take_out_order")
-    fun getAllOrder(): Call<OrderBean>
+            override fun onResponse(call: Call<OrderBean>, response: Response<OrderBean>) {
+                if (response.body()?.orderData?.size ?: 0 > 0) {
+                    orderFragment.onSuccess(response.body())
+                } else {
+                    orderFragment.onFail()
+                }
+            }
+
+        })
+    }
 }

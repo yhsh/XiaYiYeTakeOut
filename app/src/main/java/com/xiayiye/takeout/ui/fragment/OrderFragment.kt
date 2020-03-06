@@ -1,11 +1,18 @@
 package com.xiayiye.takeout.ui.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.xiayiye.takeout.R
+import com.xiayiye.takeout.model.beans.OrderBean
+import com.xiayiye.takeout.presenter.OrderFragmentPresenter
+import com.xiayiye.takeout.ui.adapter.OrderRvAdapter
+import kotlinx.android.synthetic.main.fragment_order.*
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -46,6 +53,8 @@ import com.xiayiye.takeout.R
  * 文件说明：订单的fragment
  */
 class OrderFragment : Fragment() {
+    lateinit var orderFragmentPresenter: OrderFragmentPresenter
+    private lateinit var orderRvAdapter: OrderRvAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -55,7 +64,39 @@ class OrderFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        orderFragmentPresenter = OrderFragmentPresenter(this)
         val view = inflater.inflate(R.layout.fragment_order, null)
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        srl_order.setColorSchemeColors(Color.RED, Color.BLUE, Color.GREEN)
+        srl_order.setOnRefreshListener {
+            initData()
+        }
+        rv_order_list.layoutManager = LinearLayoutManager(context)
+    }
+
+    private fun initData() {
+        //请求服务器数据
+        orderFragmentPresenter.getAllOrder()
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initData()
+    }
+
+    fun onSuccess(body: OrderBean?) {
+        srl_order.isRefreshing = false
+        //刷新adapter
+        orderRvAdapter = OrderRvAdapter(context!!, body!!.orderData)
+        rv_order_list.adapter = orderRvAdapter
+    }
+
+    fun onFail() {
+        Toast.makeText(context, "服务器繁忙", Toast.LENGTH_SHORT).show()
+        srl_order.isRefreshing = false
     }
 }

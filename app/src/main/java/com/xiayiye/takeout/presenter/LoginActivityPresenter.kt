@@ -2,11 +2,14 @@ package com.xiayiye.takeout.presenter
 
 import android.util.Log
 import android.widget.Toast
+import com.j256.ormlite.android.AndroidDatabaseConnection
 import com.xiayiye.takeout.model.beans.User
+import com.xiayiye.takeout.model.dao.TakeOutOpenHelper
 import com.xiayiye.takeout.ui.activity.LoginActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.sql.Savepoint
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -60,6 +63,37 @@ class LoginActivityPresenter(val loginActivity: LoginActivity) : NetPresenter() 
                     //成功
                     loginActivity.onSuccess(user)
                     Toast.makeText(loginActivity, "登陆成功", Toast.LENGTH_SHORT).show()
+                    //保存用户信息到本地数据库
+                    var connection: AndroidDatabaseConnection? = null
+                    var startPoint: Savepoint? = null
+                    try {
+                        val takeOutOpenHelper = TakeOutOpenHelper(loginActivity)
+                        val userDao = takeOutOpenHelper.getDao(User::class.java)
+//                    userDao.create(user)
+                        //创建或者更新用户信息
+//                    userDao.createOrUpdate(user)
+                        connection =
+                            AndroidDatabaseConnection(takeOutOpenHelper.writableDatabase, true)
+                        startPoint = connection.setSavePoint("start")
+                        //取消自动提交
+                        connection.isAutoCommit = false
+                        val queryForAll = userDao.queryForAll()
+                        var isOlderUser = false
+                        for (index in 0 until queryForAll.size) {
+                            if (queryForAll.get(index).data.id == user.data.id) {
+                                isOlderUser = true
+                            }
+                        }
+                        if (isOlderUser) {
+                            //老用户：更新数据库
+                            userDao.update(user)
+                        } else {
+                            //新用户保存到数据库
+                            userDao.create(user)
+                        }
+                    } catch (e: Exception) {
+                        connection?.rollback(startPoint)
+                    }
                 } else {
                     loginActivity.onFail()
                 }

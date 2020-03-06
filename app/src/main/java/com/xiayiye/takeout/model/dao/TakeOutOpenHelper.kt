@@ -1,10 +1,11 @@
-package com.xiayiye.takeout.model.net
+package com.xiayiye.takeout.model.dao
 
-import com.xiayiye.takeout.model.beans.OrderBean
-import com.xiayiye.takeout.model.beans.ResponseInfo
+import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
+import com.j256.ormlite.support.ConnectionSource
+import com.j256.ormlite.table.TableUtils
 import com.xiayiye.takeout.model.beans.User
-import retrofit2.Call
-import retrofit2.http.GET
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -35,23 +36,24 @@ import retrofit2.http.GET
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/5 17:45
+ * 创建时间：2020/3/6 18:09
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：XiaYiYeTakeOut
- * 文件包名：com.xiayiye.takeout.model.net
+ * 文件包名：com.xiayiye.takeout.model.dao
  * 文件说明：
  */
-interface TakeOutService {
-    //获取首页数据的接口
-    @GET("take_out_home")
-    fun getHomeInfo(): Call<ResponseInfo>
+class TakeOutOpenHelper(private val context: Context) :
+    OrmLiteSqliteOpenHelper(context, "takeout_kotlin.db", null, 1) {
+    override fun onCreate(p0: SQLiteDatabase?, p1: ConnectionSource?) {
+        //创建user表
+        TableUtils.clearTable(p1, User::class.java)
+    }
 
-    @GET("take_out_login")
-    fun login(): Call<User>
+    override fun onUpgrade(p0: SQLiteDatabase?, p1: ConnectionSource?, p2: Int, p3: Int) {
 
-    @GET("take_out_order")
-    fun getAllOrder(): Call<OrderBean>
+    }
+
 }
