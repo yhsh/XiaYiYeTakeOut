@@ -64,6 +64,7 @@ class HomeFragment : Fragment() {
         super.onCreate(savedInstanceState)
         //初始化P层
 //      homePresenter = HomeFragmentPresenter(this)
+        //使用dagger2解耦
         DaggerHomeFragmentComponent.builder().homeFragmentModule(HomeFragmentModule(this)).build()
             .inject(this)
         homePresenter.getHomeInfo()

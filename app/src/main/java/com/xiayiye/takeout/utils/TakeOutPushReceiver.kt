@@ -52,7 +52,19 @@ class TakeOutPushReceiver : JPushMessageReceiver() {
         Log.e("打印推送", "TakeOutPushReceiver")
     }
 
+    /**
+     * 收到通知的方法
+     */
     override fun onNotifyMessageOpened(context: Context, message: NotificationMessage) {
+        /* mseeag里面包含的数据
+        * NotificationMessage
+        * {notificationId=536216457, msgId='58546843939007647', appkey='241b60764bfb1b22dbce57f9',
+        *  notificationContent='送到公司电话公司的韩国华盛顿国会山大哥', notificationAlertType=7,
+        * notificationTitle='若有一日一日一日一夜', notificationSmallIcon='', notificationLargeIcon='',
+        * notificationExtras='{}', notificationStyle=0, notificationBuilderId=0, notificationBigText='',
+        * notificationBigPicPath='', notificationInbox='', notificationPriority=0, notificationCategory='',
+        * developerArg0='', platform=0, notificationChannelId='', displayForeground='', notificationType=0}
+        * */
         Log.e(TAG, "[onNotifyMessageOpened] $message")
 
     }

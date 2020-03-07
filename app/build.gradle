@@ -97,4 +97,9 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.5'
 //    implementation files('libs/SMSSDK-3.0.0.aar')
     implementation(name: 'SMSSDK-3.0.0', ext: 'aar')
+
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'//配合Rxjava 使用
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'//添加HttpLoggingInterceptor进行调试
 }

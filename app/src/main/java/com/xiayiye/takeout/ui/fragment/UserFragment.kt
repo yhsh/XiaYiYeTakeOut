@@ -78,7 +78,8 @@ class UserFragment : Fragment() {
                 val user = (data.getSerializableExtra("user")) as User
                 println("打印用户${user.data.name}")
                 //登录成功
-                username.text = StringBuffer("欢迎您,").append(user.data.name)
+                username.text =
+                    StringBuffer("欢迎您,").append(user.data.name).append(user.data.phone.substring(6))
                 username.visibility = View.VISIBLE
                 ll_userinfo.visibility = View.VISIBLE
                 login.visibility = View.GONE

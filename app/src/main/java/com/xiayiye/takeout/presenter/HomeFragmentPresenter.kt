@@ -2,14 +2,12 @@ package com.xiayiye.takeout.presenter
 
 import com.xiayiye.takeout.model.beans.ResponseData
 import com.xiayiye.takeout.model.beans.ResponseInfo
-import com.xiayiye.takeout.model.net.TakeOutService
 import com.xiayiye.takeout.ui.fragment.HomeFragment
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.toast
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -49,18 +47,11 @@ import retrofit2.converter.gson.GsonConverterFactory
  * 文件包名：com.xiayiye.takeout.presenter
  * 文件说明：
  */
-class HomeFragmentPresenter(private val homeFragment: HomeFragment) {
-    private var takeOutService: TakeOutService
-
-    init {
-        val retrofit = Retrofit.Builder().baseUrl("https://getman.cn/mock/")
-            .addConverterFactory(GsonConverterFactory.create()).build()
-        takeOutService = retrofit.create(TakeOutService::class.java)
-    }
+class HomeFragmentPresenter(private val homeFragment: HomeFragment) : NetPresenter() {
 
     fun getHomeInfo() {
         //TODO 异步获取接口数据
-        takeOutService.getHomeInfo().enqueue(object : Callback<ResponseInfo> {
+        /*takeOutService.getHomeInfo().enqueue(object : Callback<ResponseInfo> {
             override fun onFailure(call: Call<ResponseInfo>, t: Throwable) {
                 println("打印网络数据错误")
                 homeFragment.context?.toast("请求服务器数据错误")
@@ -77,7 +68,38 @@ class HomeFragmentPresenter(private val homeFragment: HomeFragment) {
                     homeFragment.context?.toast("请求服务器数据为空")
                 }
             }
-        })
+        })*/
+
+        /**
+         * 使用RxJava调用接口
+         */
+        takeOutService.getHomeInfoByRxJava().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(object : Observer<ResponseInfo> {
+                override fun onComplete() {
+
+                }
+
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onNext(response: ResponseInfo) {
+                    val data = response.data
+                    val code = response.code
+                    if ("0" == code) {
+                        parserJson(data)
+                        homeFragment.context?.toast("请求服务器数据成功")
+                    } else {
+                        homeFragment.context?.toast("请求服务器数据为空")
+                    }
+                }
+
+                override fun onError(e: Throwable) {
+                    println("打印网络数据错误")
+                    homeFragment.context?.toast("请求服务器数据错误")
+                    e.printStackTrace()
+                }
+            })
     }
 
     private fun parserJson(data: ResponseData?) {
@@ -86,7 +108,7 @@ class HomeFragmentPresenter(private val homeFragment: HomeFragment) {
         if (nearbySellerList!!.isNotEmpty() && otherSellerList!!.isNotEmpty()) {
             println("打印附近商家信息$nearbySellerList")
             //有数据成功
-            homeFragment.homeOnSuccess(nearbySellerList,otherSellerList)
+            homeFragment.homeOnSuccess(nearbySellerList, otherSellerList)
         } else {
             //无数据失败
             homeFragment.homeOnFail()

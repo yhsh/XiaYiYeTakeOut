@@ -2,6 +2,10 @@ package com.xiayiye.takeout.presenter
 
 import com.xiayiye.takeout.model.beans.OrderBean
 import com.xiayiye.takeout.ui.fragment.OrderFragment
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,19 +50,41 @@ import retrofit2.Response
  */
 class OrderFragmentPresenter(val orderFragment: OrderFragment) : NetPresenter() {
     fun getAllOrder() {
-        takeOutService.getAllOrder().enqueue(object : Callback<OrderBean> {
-            override fun onFailure(call: Call<OrderBean>, t: Throwable) {
+        /* takeOutService.getAllOrder().enqueue(object : Callback<OrderBean> {
+             override fun onFailure(call: Call<OrderBean>, t: Throwable) {
 
-            }
+             }
 
-            override fun onResponse(call: Call<OrderBean>, response: Response<OrderBean>) {
-                if (response.body()?.orderData?.size ?: 0 > 0) {
-                    orderFragment.onSuccess(response.body())
-                } else {
+             override fun onResponse(call: Call<OrderBean>, response: Response<OrderBean>) {
+                 if (response.body()?.orderData?.size ?: 0 > 0) {
+                     orderFragment.onSuccess(response.body())
+                 } else {
+                     orderFragment.onFail()
+                 }
+             }
+
+         })*/
+
+        /**
+         * 结合RxJava使用调用接口
+         */
+        takeOutService.getAllOrderByRxJava().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(object : Observer<OrderBean> {
+                override fun onComplete() {
+
+                }
+
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onNext(t: OrderBean) {
+                    orderFragment.onSuccess(t)
+                }
+
+                override fun onError(e: Throwable) {
                     orderFragment.onFail()
                 }
-            }
-
-        })
+            })
     }
 }

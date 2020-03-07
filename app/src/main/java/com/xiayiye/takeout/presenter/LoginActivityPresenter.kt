@@ -6,9 +6,10 @@ import com.j256.ormlite.android.AndroidDatabaseConnection
 import com.xiayiye.takeout.model.beans.User
 import com.xiayiye.takeout.model.dao.TakeOutOpenHelper
 import com.xiayiye.takeout.ui.activity.LoginActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.sql.Savepoint
 
 /*
@@ -51,53 +52,80 @@ import java.sql.Savepoint
  */
 class LoginActivityPresenter(val loginActivity: LoginActivity) : NetPresenter() {
     fun loginByPhone(phone: String) {
-        takeOutService.login().enqueue(object : Callback<User> {
-            override fun onFailure(call: Call<User>, t: Throwable) {
-                Toast.makeText(loginActivity, t.message, Toast.LENGTH_SHORT).show()
-            }
+        /* takeOutService.login().enqueue(object : Callback<User> {
+             override fun onFailure(call: Call<User>, t: Throwable) {
+                 Toast.makeText(loginActivity, t.message, Toast.LENGTH_SHORT).show()
+             }
 
-            override fun onResponse(call: Call<User>, response: Response<User>) {
-                val user = response.body()
-                Log.e("打印登陆数据", user.toString() + Thread.currentThread().name)
-                if (user != null) {
-                    //成功
-                    loginActivity.onSuccess(user)
-                    Toast.makeText(loginActivity, "登陆成功", Toast.LENGTH_SHORT).show()
-                    //保存用户信息到本地数据库
-                    var connection: AndroidDatabaseConnection? = null
-                    var startPoint: Savepoint? = null
-                    try {
-                        val takeOutOpenHelper = TakeOutOpenHelper(loginActivity)
-                        val userDao = takeOutOpenHelper.getDao(User::class.java)
-//                    userDao.create(user)
-                        //创建或者更新用户信息
-//                    userDao.createOrUpdate(user)
-                        connection =
-                            AndroidDatabaseConnection(takeOutOpenHelper.writableDatabase, true)
-                        startPoint = connection.setSavePoint("start")
-                        //取消自动提交
-                        connection.isAutoCommit = false
-                        val queryForAll = userDao.queryForAll()
-                        var isOlderUser = false
-                        for (index in 0 until queryForAll.size) {
-                            if (queryForAll.get(index).data.id == user.data.id) {
-                                isOlderUser = true
-                            }
-                        }
-                        if (isOlderUser) {
-                            //老用户：更新数据库
-                            userDao.update(user)
-                        } else {
-                            //新用户保存到数据库
-                            userDao.create(user)
-                        }
-                    } catch (e: Exception) {
-                        connection?.rollback(startPoint)
-                    }
-                } else {
-                    loginActivity.onFail()
+             override fun onResponse(call: Call<User>, response: Response<User>) {
+                 val user = response.body()
+                 Log.e("打印登陆数据", user.toString() + Thread.currentThread().name)
+                 if (user != null) {
+                     loginSuccessData(user)
+                 } else {
+                     loginActivity.onFail()
+                 }
+             }
+         })*/
+
+        /**
+         * 结合RxJava使用
+         */
+        takeOutService.loginByRxJava().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).subscribe(object : Observer<User> {
+                override fun onComplete() {
+
+                }
+
+                override fun onSubscribe(d: Disposable) {
+
+                }
+
+                override fun onNext(user: User) {
+                    Log.e("打印登陆数据", user.toString() + Thread.currentThread().name)
+                    loginSuccessData(user)
+                }
+
+                override fun onError(e: Throwable) {
+                    Toast.makeText(loginActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun loginSuccessData(user: User) {
+        //成功
+        loginActivity.onSuccess(user)
+        Toast.makeText(loginActivity, "登陆成功", Toast.LENGTH_SHORT).show()
+        //保存用户信息到本地数据库
+        var connection: AndroidDatabaseConnection? = null
+        var startPoint: Savepoint? = null
+        try {
+            val takeOutOpenHelper = TakeOutOpenHelper(loginActivity)
+            val userDao = takeOutOpenHelper.getDao(User::class.java)
+            //                    userDao.create(user)
+            //创建或者更新用户信息
+            //                    userDao.createOrUpdate(user)
+            connection =
+                AndroidDatabaseConnection(takeOutOpenHelper.writableDatabase, true)
+            startPoint = connection.setSavePoint("start")
+            //取消自动提交
+            connection.isAutoCommit = false
+            val queryForAll = userDao.queryForAll()
+            var isOlderUser = false
+            for (index in 0 until queryForAll.size) {
+                if (queryForAll.get(index).data.id == user.data.id) {
+                    isOlderUser = true
                 }
             }
-        })
+            if (isOlderUser) {
+                //老用户：更新数据库
+                userDao.update(user)
+            } else {
+                //新用户保存到数据库
+                userDao.create(user)
+            }
+        } catch (e: Exception) {
+            connection?.rollback(startPoint)
+        }
     }
 }

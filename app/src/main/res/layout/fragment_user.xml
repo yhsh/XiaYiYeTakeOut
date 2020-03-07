@@ -95,7 +95,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="用户信息"
-                            android:textColor="#ff0000"
+                            android:textColor="#fff"
                             android:textSize="18sp" />
 
                         <LinearLayout

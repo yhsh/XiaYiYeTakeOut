@@ -3,6 +3,7 @@ package com.xiayiye.takeout.model.net
 import com.xiayiye.takeout.model.beans.OrderBean
 import com.xiayiye.takeout.model.beans.ResponseInfo
 import com.xiayiye.takeout.model.beans.User
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
 
@@ -54,4 +55,14 @@ interface TakeOutService {
 
     @GET("take_out_order")
     fun getAllOrder(): Call<OrderBean>
+
+    //获取首页数据的接口
+    @GET("take_out_home")
+    fun getHomeInfoByRxJava(): Observable<ResponseInfo>
+
+    @GET("take_out_login")
+    fun loginByRxJava(): Observable<User>
+
+    @GET("take_out_order")
+    fun getAllOrderByRxJava(): Observable<OrderBean>
 }

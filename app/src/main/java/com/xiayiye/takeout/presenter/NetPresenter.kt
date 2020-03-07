@@ -1,13 +1,8 @@
 package com.xiayiye.takeout.presenter
 
-import android.content.Context
-import com.xiayiye.takeout.model.beans.ResponseInfo
 import com.xiayiye.takeout.model.net.TakeOutService
-import org.jetbrains.anko.toast
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 /*
@@ -53,8 +48,11 @@ open class NetPresenter() {
 
     init {
         val retrofit = Retrofit.Builder().baseUrl("https://getman.cn/mock/")
-            .addConverterFactory(GsonConverterFactory.create()).build()
+            //增加 Gson 转换器
+            .addConverterFactory(GsonConverterFactory.create())
+            //增加RxJava适配工厂转换器
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
         takeOutService = retrofit.create(TakeOutService::class.java)
-
     }
 }
