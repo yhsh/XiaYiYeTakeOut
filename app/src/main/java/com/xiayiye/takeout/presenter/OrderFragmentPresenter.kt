@@ -6,9 +6,6 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -68,7 +65,7 @@ class OrderFragmentPresenter(val orderFragment: OrderFragment) : NetPresenter() 
         /**
          * 结合RxJava使用调用接口
          */
-        takeOutService.getAllOrderByRxJava().subscribeOn(Schedulers.io())
+        /*takeOutService.getAllOrderByRxJava().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe(object : Observer<OrderBean> {
                 override fun onComplete() {
 
@@ -85,6 +82,13 @@ class OrderFragmentPresenter(val orderFragment: OrderFragment) : NetPresenter() 
                 override fun onError(e: Throwable) {
                     orderFragment.onFail()
                 }
-            })
+            })*/
+
+        /**
+         * 结合RxJava使用调用接口Kotlin简写版本
+         */
+        val subscribe = takeOutService.getAllOrderByRxJava().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ orderFragment.onSuccess(it) }, { orderFragment.onFail() }, {})
     }
 }

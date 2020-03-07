@@ -53,7 +53,7 @@ import java.util.*
  * 文件包名：com.xiayiye.takeout.ui.fragment
  * 文件说明：订单的fragment
  */
-class OrderFragment : Fragment() , Observer {
+class OrderFragment : Fragment(), Observer {
     override fun update(p0: Observable?, p1: Any?) {
         //当收到推送消息，从这里刷新订单状态
     }
@@ -93,15 +93,17 @@ class OrderFragment : Fragment() , Observer {
         initData()
     }
 
-    fun onSuccess(body: OrderBean?) {
-        srl_order.isRefreshing = false
+    fun onSuccess(body: OrderBean) {
+        srl_order?.let { srl_order.isRefreshing = false }
         //刷新adapter
-        orderRvAdapter = OrderRvAdapter(context!!, body!!.orderData)
-        rv_order_list.adapter = orderRvAdapter
+        context?.let {
+            orderRvAdapter = OrderRvAdapter(it, body.orderData)
+            rv_order_list.adapter = orderRvAdapter
+        }
     }
 
     fun onFail() {
-        Toast.makeText(context, "服务器繁忙", Toast.LENGTH_SHORT).show()
-        srl_order.isRefreshing = false
+        context?.let { Toast.makeText(context, "服务器繁忙", Toast.LENGTH_SHORT).show() }
+        srl_order?.let { srl_order.isRefreshing = false }
     }
 }

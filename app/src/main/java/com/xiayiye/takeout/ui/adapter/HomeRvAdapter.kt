@@ -1,6 +1,7 @@
 package com.xiayiye.takeout.ui.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -12,6 +13,7 @@ import com.daimajia.slider.library.SliderTypes.TextSliderView
 import com.squareup.picasso.Picasso
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.Seller
+import com.xiayiye.takeout.ui.activity.BusinessActivity
 import org.jetbrains.anko.find
 
 /*
@@ -135,6 +137,15 @@ class HomeRvAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.Vi
             tvHomeDistance = itemView.findViewById(R.id.tv_home_distance)
             ratingBar = itemView.findViewById(R.id.ratingBar)
             sellerLogo = itemView.find(R.id.seller_logo)
+            //跳转商家店铺页面
+            itemView.setOnClickListener {
+                context.startActivity(
+                    Intent(
+                        context,
+                        BusinessActivity::class.java
+                    )
+                )
+            }
         }
 
         fun bindData(data: Seller) {

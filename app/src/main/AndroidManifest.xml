@@ -225,6 +225,7 @@
                 <category android:name="com.xiayiye.takeout" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.BusinessActivity" />
 
         <!-- Required. For publish channel feature -->
         <!-- JPUSH_CHANNEL 是为了方便开发者统计 APK 分发渠道。-->
