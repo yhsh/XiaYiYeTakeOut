@@ -50,6 +50,14 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    //设置所放so库文件目录
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8

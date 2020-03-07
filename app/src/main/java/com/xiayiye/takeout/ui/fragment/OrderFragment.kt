@@ -13,6 +13,7 @@ import com.xiayiye.takeout.model.beans.OrderBean
 import com.xiayiye.takeout.presenter.OrderFragmentPresenter
 import com.xiayiye.takeout.ui.adapter.OrderRvAdapter
 import kotlinx.android.synthetic.main.fragment_order.*
+import java.util.*
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -52,7 +53,11 @@ import kotlinx.android.synthetic.main.fragment_order.*
  * 文件包名：com.xiayiye.takeout.ui.fragment
  * 文件说明：订单的fragment
  */
-class OrderFragment : Fragment() {
+class OrderFragment : Fragment() , Observer {
+    override fun update(p0: Observable?, p1: Any?) {
+        //当收到推送消息，从这里刷新订单状态
+    }
+
     lateinit var orderFragmentPresenter: OrderFragmentPresenter
     private lateinit var orderRvAdapter: OrderRvAdapter
     override fun onCreate(savedInstanceState: Bundle?) {

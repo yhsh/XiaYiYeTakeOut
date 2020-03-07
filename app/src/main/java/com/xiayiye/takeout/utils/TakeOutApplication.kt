@@ -1,5 +1,6 @@
 package com.xiayiye.takeout.utils
 
+import cn.jpush.android.api.JPushInterface
 import com.mob.MobApplication
 
 /*
@@ -43,5 +44,8 @@ import com.mob.MobApplication
 class TakeOutApplication : MobApplication() {
     override fun onCreate() {
         super.onCreate()
+        //初始化极光推送
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 }
