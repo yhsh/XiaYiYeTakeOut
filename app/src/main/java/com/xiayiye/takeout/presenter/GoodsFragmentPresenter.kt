@@ -1,5 +1,6 @@
 package com.xiayiye.takeout.presenter
 
+import com.xiayiye.takeout.model.beans.GoodData
 import com.xiayiye.takeout.model.beans.Goods
 import com.xiayiye.takeout.model.beans.GoodsBean
 import com.xiayiye.takeout.ui.fragment.GoodsFragment
@@ -48,6 +49,7 @@ import io.reactivex.schedulers.Schedulers
  */
 class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
     val allTypeGood = arrayListOf<Goods>()
+    lateinit var goodData: List<GoodData>
     fun getGoodListUrl() {
         takeOutService.getAllGoodByJava().subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread()).subscribe(object : Observer<GoodsBean> {
@@ -60,7 +62,7 @@ class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
                 }
 
                 override fun onNext(goodBean: GoodsBean) {
-                    val goodData = goodBean.goodData
+                    goodData = goodBean.goodData
                     println("打印商品信息$goodBean 商品种类个数：${goodData.size}")
                     for (i in goodData.indices) {
                         val goodTypeInfo = goodData.get(i)
@@ -86,6 +88,18 @@ class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
         var position = -1
         for (index in 0 until allTypeGood.size) {
             if (id == allTypeGood[index].typeId) {
+                position = index
+                break
+            }
+        }
+        return position
+    }
+
+    fun getPositionByNewId(newTypeId: Int): Int {
+        // -1 表示未找到
+        var position = -1
+        for (index in goodData.indices) {
+            if (newTypeId == goodData[index].id) {
                 position = index
                 break
             }

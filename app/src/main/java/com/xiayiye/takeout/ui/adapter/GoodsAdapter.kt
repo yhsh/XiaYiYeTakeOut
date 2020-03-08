@@ -1,9 +1,12 @@
 package com.xiayiye.takeout.ui.adapter
 
 import android.graphics.Color
+import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.*
 import android.widget.BaseAdapter
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -11,6 +14,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.Goods
+import com.xiayiye.takeout.ui.fragment.GoodsFragment
 import org.jetbrains.anko.find
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter
 
@@ -52,7 +56,11 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter
  * 文件包名：com.xiayiye.takeout.ui.adapter
  * 文件说明：
  */
-class GoodsAdapter(private val goodList: ArrayList<Goods>) : BaseAdapter(),
+class GoodsAdapter(
+    private val goodsFragment: GoodsFragment,
+    private val goodList: ArrayList<Goods>
+) :
+    BaseAdapter(),
     StickyListHeadersAdapter {
     override fun getView(position: Int, contentView: View?, parent: ViewGroup?): View {
         val goodViewHolder: GoodViewHolder
@@ -70,6 +78,7 @@ class GoodsAdapter(private val goodList: ArrayList<Goods>) : BaseAdapter(),
             goodViewHolder.ivIcon = itemView.find<ImageView>(R.id.iv_icon)
             goodViewHolder.btMinus = itemView.find<ImageButton>(R.id.bt_minus)
             goodViewHolder.btAdd = itemView.find<ImageButton>(R.id.bt_add)
+            goodViewHolder.tvCount = itemView.find<TextView>(R.id.tv_count)
         } else {
             goodViewHolder = (contentView.tag) as GoodViewHolder
             itemView = contentView
@@ -78,13 +87,130 @@ class GoodsAdapter(private val goodList: ArrayList<Goods>) : BaseAdapter(),
         goodViewHolder.tvName.text = itemTypeData.name
         goodViewHolder.tvNewPrice.text = StringBuffer("￥").append(itemTypeData.newPrice)
         goodViewHolder.tvOldPrice.text = StringBuffer("￥").append(itemTypeData.oldPrice)
+//        goodViewHolder.tvOldPrice.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+        goodViewHolder.tvOldPrice.paint.flags = Paint.STRIKE_THRU_TEXT_FLAG
+        //抗锯齿
+        goodViewHolder.tvOldPrice.paint.isAntiAlias = true
         goodViewHolder.tvMonthSale.text =
             StringBuffer("月售").append(itemTypeData.monthSaleNum).append("份")
         goodViewHolder.tvForm.text = itemTypeData.from
         Picasso.with(parent?.context).load(itemTypeData.icon).into(goodViewHolder.ivIcon)
-        goodViewHolder.btMinus.setOnClickListener { }
-        goodViewHolder.btAdd.setOnClickListener { }
+        if (itemTypeData.count > 0) {
+            goodViewHolder.tvCount.visibility = View.VISIBLE
+            goodViewHolder.btMinus.visibility = View.VISIBLE
+        } else {
+            goodViewHolder.tvCount.visibility = View.GONE
+            goodViewHolder.btMinus.visibility = View.GONE
+        }
+        goodViewHolder.btMinus.setOnClickListener {
+            var oldCount = goodList[position].count
+            if (oldCount > 0) {
+                //显示红点
+                if (oldCount == 1) {
+                    val animationSet = hideAnimation()
+                    goodViewHolder.tvCount.startAnimation(animationSet)
+                    goodViewHolder.btMinus.startAnimation(animationSet)
+                }
+                oldCount--
+                //设置红点的数量
+//                processRedNotCount(false, position)
+                setShopNumber(oldCount, goodViewHolder, position)
+            }
+        }
+        goodViewHolder.btAdd.setOnClickListener {
+            var oldCount = itemTypeData.count
+            if (oldCount == 0) {
+                val animationSet = showAnimation()
+                goodViewHolder.tvCount.startAnimation(animationSet)
+                goodViewHolder.btMinus.startAnimation(animationSet)
+            }
+            oldCount++
+            //设置红点的数量
+//            processRedNotCount(true, position)
+            setShopNumber(oldCount, goodViewHolder, position)
+        }
         return itemView
+    }
+
+    /**
+     * 设置小红点数量的方法
+     */
+    private fun processRedNotCount(isAdd: Boolean, position: Int) {
+        val typePosition =
+            goodsFragment.goodsFragmentPresenter.getGoodPositionByTypeId(goodList[position].typeId)
+        val goodTypeInfo = goodsFragment.goodsFragmentPresenter.goodData[typePosition]
+        var redPointCount = goodTypeInfo.redPointCount
+        if (isAdd) {
+            redPointCount++
+        } else {
+            redPointCount--
+        }
+        goodTypeInfo.redPointCount = redPointCount
+        //刷新左侧列表
+        goodsFragment.goodTypeRvAdapter.notifyDataSetChanged()
+    }
+
+    private fun showAnimation(): AnimationSet {
+        val animationSet = AnimationSet(false)
+        val alpha = AlphaAnimation(0.0f, 1.0f)
+        val rotate = RotateAnimation(
+            0.0f,
+            720f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        val translate = TranslateAnimation(
+            Animation.RELATIVE_TO_SELF,
+            2.0f,
+            Animation.RELATIVE_TO_SELF,
+            0.0f,
+            Animation.RELATIVE_TO_SELF,
+            0.0f,
+            Animation.RELATIVE_TO_SELF,
+            0.0f
+        )
+        animationSet.duration = 1000
+        animationSet.addAnimation(rotate)
+        animationSet.addAnimation(translate)
+        animationSet.addAnimation(alpha)
+        return animationSet
+    }
+
+    private fun hideAnimation(): AnimationSet {
+        val animationSet = AnimationSet(false)
+        val alpha = AlphaAnimation(1.0f, 0.0f)
+        val rotate = RotateAnimation(
+            720.0f,
+            0.00f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        val translate = TranslateAnimation(
+            Animation.RELATIVE_TO_SELF,
+            0f,
+            Animation.RELATIVE_TO_SELF,
+            2.0f,
+            Animation.RELATIVE_TO_SELF,
+            0.0f,
+            Animation.RELATIVE_TO_SELF,
+            0.0f
+        )
+        animationSet.duration = 1000
+        animationSet.addAnimation(rotate)
+        animationSet.addAnimation(translate)
+        animationSet.addAnimation(alpha)
+        return animationSet
+    }
+
+    private fun setShopNumber(newCount: Int, goodViewHolder: GoodViewHolder, position: Int) {
+        //将数量设置给文本
+        goodViewHolder.tvCount.text = newCount.toString()
+        goodList.get(position).count = newCount
+        notifyDataSetChanged()
     }
 
     override fun getItem(position: Int): Any = goodList[position]
@@ -120,5 +246,6 @@ class GoodsAdapter(private val goodList: ArrayList<Goods>) : BaseAdapter(),
         lateinit var ivIcon: ImageView
         lateinit var btMinus: ImageButton
         lateinit var btAdd: ImageButton
+        lateinit var tvCount: TextView
     }
 }

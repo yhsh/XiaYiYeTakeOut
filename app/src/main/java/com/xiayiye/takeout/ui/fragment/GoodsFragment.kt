@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,6 +56,7 @@ import kotlinx.android.synthetic.main.fragment_goods.*
  */
 class GoodsFragment : Fragment() {
     val goodsFragmentPresenter by lazy { GoodsFragmentPresenter(this) }
+    lateinit var goodTypeRvAdapter: GoodTypeRvAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -75,8 +77,39 @@ class GoodsFragment : Fragment() {
         goodBean: GoodsBean,
         allTypeGood: ArrayList<Goods>
     ) {
-        rv_goods_type.adapter = GoodTypeRvAdapter(goodBean.goodData, this)
-        slhlv.adapter = GoodsAdapter(allTypeGood)
+        goodTypeRvAdapter = GoodTypeRvAdapter(goodBean.goodData, this)
+        rv_goods_type.adapter = goodTypeRvAdapter
+        slhlv.adapter = GoodsAdapter(this, allTypeGood)
+        //数据展示成功后再设置滑动监听
+        slhlv.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScroll(
+                view: AbsListView?,
+                firstVisibleItem: Int,
+                visibleItemCount: Int,
+                totalItemCount: Int
+            ) {
+                //找到旧的position位置
+                val oldPosition = goodTypeRvAdapter.selectPosition
+                val oldTypeId = allTypeGood[oldPosition].typeId
+                //滑动获取新的position
+                val newTypeId = allTypeGood[firstVisibleItem].typeId
+                if (oldTypeId != newTypeId) {
+                    //修改左侧滑动位置
+                    val newPosition = goodsFragmentPresenter.getPositionByNewId(newTypeId)
+                    //设置新的选中位置
+                    goodTypeRvAdapter.selectPosition = newPosition
+                    //刷新布局
+                    goodTypeRvAdapter.notifyDataSetChanged()
+                    //将左边列表滑动到滑动的位置
+                    rv_goods_type.scrollToPosition(newPosition)
+                }
+            }
+
+            override fun onScrollStateChanged(view: AbsListView?, scrollState: Int) {
+
+            }
+
+        })
     }
 
     fun onFail() {

@@ -48,7 +48,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
 
             <TextView
                 android:id="@+id/tv_newprice"
@@ -75,6 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
+                android:layout_marginBottom="5dp"
                 android:gravity="right"
                 android:orientation="horizontal">
 

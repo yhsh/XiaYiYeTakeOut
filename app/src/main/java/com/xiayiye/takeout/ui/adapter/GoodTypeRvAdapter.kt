@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.GoodData
-import com.xiayiye.takeout.model.beans.Goods
 import com.xiayiye.takeout.ui.fragment.GoodsFragment
 import kotlinx.android.synthetic.main.fragment_goods.*
 
@@ -69,7 +68,7 @@ class GoodTypeRvAdapter(
     var selectPosition = 0
 
     inner class GoodTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var mPosition = 0
+        private var mPosition = 0
         lateinit var goodTypeInfo: GoodData
 
         init {
@@ -85,6 +84,7 @@ class GoodTypeRvAdapter(
         }
 
         private val tvGoodType = itemView.findViewById<TextView>(R.id.type)
+        private val tvRedDotCount = itemView.findViewById<TextView>(R.id.tvRedDotCount)
         fun bindView(goodData: GoodData, position: Int) {
             mPosition = position
             goodTypeInfo = goodData
@@ -100,6 +100,14 @@ class GoodTypeRvAdapter(
                 tvGoodType.setTextColor(Color.GRAY)
             }
             tvGoodType.text = goodData.name
+            //显示红点数量
+            val redPointCount = goodData.redPointCount
+            if (redPointCount > 0) {
+                tvRedDotCount.visibility = View.VISIBLE
+                tvRedDotCount.text = redPointCount.toString()
+            } else {
+                tvRedDotCount.visibility = View.GONE
+            }
         }
     }
 }
