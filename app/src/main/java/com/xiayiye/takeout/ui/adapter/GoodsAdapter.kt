@@ -2,6 +2,7 @@ package com.xiayiye.takeout.ui.adapter
 
 import android.graphics.Color
 import android.graphics.Paint
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.Goods
+import com.xiayiye.takeout.ui.activity.BusinessActivity
 import com.xiayiye.takeout.ui.fragment.GoodsFragment
 import org.jetbrains.anko.find
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter
@@ -113,7 +115,7 @@ class GoodsAdapter(
                 }
                 oldCount--
                 //设置红点的数量
-//                processRedNotCount(false, position)
+                processRedNotCount(false, position)
                 setShopNumber(oldCount, goodViewHolder, position)
             }
         }
@@ -126,10 +128,82 @@ class GoodsAdapter(
             }
             oldCount++
             //设置红点的数量
-//            processRedNotCount(true, position)
+            processRedNotCount(true, position)
             setShopNumber(oldCount, goodViewHolder, position)
+            //点击加号产生抛物线的效果
+            val ib = ImageButton(parent?.context)
+            ib.setBackgroundResource(R.mipmap.button_add)
+            val outLocation = IntArray(2)
+            goodViewHolder.btAdd.getLocationInWindow(outLocation)
+            //设置复制的加号的绝对值坐标
+            ib.x = outLocation[0].toFloat()
+            ib.y = outLocation[1].toFloat()
+            Log.e("打印X：", outLocation[0].toString() + "Y 轴：" + outLocation[1].toString())
+            ((goodsFragment.activity) as BusinessActivity).addImageButton(
+                ib,
+                goodViewHolder.btAdd.width,
+                goodViewHolder.btAdd.height
+            )
+            val destLocation: IntArray =
+                ((goodsFragment.activity) as BusinessActivity).getCarLocation()
+            //执行抛物线动画
+            val animationSet = setAnimation(ib, outLocation, destLocation)
+            ib.startAnimation(animationSet)
         }
         return itemView
+    }
+
+    /**
+     * 抛物线的动画
+     */
+    private fun setAnimation(
+        ib: ImageButton,
+        outLocation: IntArray,
+        destLocation: IntArray
+    ): AnimationSet {
+        val anim = AnimationSet(false)
+        val translateX = TranslateAnimation(
+            Animation.ABSOLUTE,
+            0f,
+            Animation.ABSOLUTE,
+            destLocation[0].toFloat() - outLocation[0],
+            Animation.ABSOLUTE,
+            0f,
+            Animation.ABSOLUTE,
+            0f
+        )
+        val translateY = TranslateAnimation(
+            Animation.ABSOLUTE,
+            0f,
+            Animation.ABSOLUTE,
+            0f,
+            Animation.ABSOLUTE,
+            0f,
+            Animation.ABSOLUTE,
+            destLocation[1].toFloat() - outLocation[1]
+        )
+        //设置Y 轴方向加速效果
+        translateY.interpolator = AccelerateInterpolator()
+        anim.addAnimation(translateX)
+        anim.addAnimation(translateY)
+        anim.duration = 1500
+        //设置动画监听
+        anim.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(p0: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                //动画结束,移除加号按钮,下面是解决报错的方法将移除操作放入子线程
+                //java.lang.NullPointerException: Attempt to read from field 'int android.view.View.mViewFlags' on a null object reference
+                Handler().post { (ib.parent as ViewGroup).removeView(ib) }
+            }
+
+            override fun onAnimationStart(p0: Animation?) {
+
+            }
+        })
+        return anim
     }
 
     /**
@@ -137,7 +211,7 @@ class GoodsAdapter(
      */
     private fun processRedNotCount(isAdd: Boolean, position: Int) {
         val typePosition =
-            goodsFragment.goodsFragmentPresenter.getGoodPositionByTypeId(goodList[position].typeId)
+            goodsFragment.goodsFragmentPresenter.getTypePositionByTypeId(goodList[position].typeId)
         val goodTypeInfo = goodsFragment.goodsFragmentPresenter.goodData[typePosition]
         var redPointCount = goodTypeInfo.redPointCount
         if (isAdd) {

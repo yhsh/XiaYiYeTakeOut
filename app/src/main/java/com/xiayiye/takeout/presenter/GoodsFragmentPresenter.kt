@@ -95,7 +95,7 @@ class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
         return position
     }
 
-    fun getPositionByNewId(newTypeId: Int): Int {
+    fun getTypePositionByTypeId(newTypeId: Int): Int {
         // -1 表示未找到
         var position = -1
         for (index in goodData.indices) {

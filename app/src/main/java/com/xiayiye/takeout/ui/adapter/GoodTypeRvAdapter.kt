@@ -2,6 +2,7 @@ package com.xiayiye.takeout.ui.adapter
 
 import android.graphics.Color
 import android.graphics.Typeface
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -55,7 +56,9 @@ class GoodTypeRvAdapter(
 ) :
     RecyclerView.Adapter<GoodTypeRvAdapter.GoodTypeViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoodTypeViewHolder {
-        val itemType = View.inflate(parent.context, R.layout.item_type, null)
+//        val itemType = View.inflate(parent.context, R.layout.item_type, null)
+        val itemType =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_type, parent, false)
         return GoodTypeViewHolder(itemType)
     }
 

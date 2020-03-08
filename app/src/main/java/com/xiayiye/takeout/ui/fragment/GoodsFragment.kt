@@ -95,7 +95,7 @@ class GoodsFragment : Fragment() {
                 val newTypeId = allTypeGood[firstVisibleItem].typeId
                 if (oldTypeId != newTypeId) {
                     //修改左侧滑动位置
-                    val newPosition = goodsFragmentPresenter.getPositionByNewId(newTypeId)
+                    val newPosition = goodsFragmentPresenter.getTypePositionByTypeId(newTypeId)
                     //设置新的选中位置
                     goodTypeRvAdapter.selectPosition = newPosition
                     //刷新布局

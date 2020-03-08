@@ -1,6 +1,8 @@
 package com.xiayiye.takeout.ui.activity
 
+import android.location.Location
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.xiayiye.takeout.R
@@ -56,5 +58,19 @@ class BusinessActivity : AppCompatActivity() {
         setContentView(R.layout.activity_business)
         vp.adapter = BusinessAdapter(list, listTitle, supportFragmentManager)
         tabs.setupWithViewPager(vp)
+    }
+
+    //添加加号按钮到activity上面
+    fun addImageButton(ib: ImageButton, width: Int, height: Int) {
+        fl_Container.addView(ib, width, height)
+    }
+
+    /**
+     * 拿到购物车我图片在屏幕上的绝对位置
+     */
+    fun getCarLocation(): IntArray {
+        val outLocation = IntArray(2)
+        imgCart.getLocationInWindow(outLocation)
+        return outLocation
     }
 }
