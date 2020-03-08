@@ -1,12 +1,10 @@
-package com.xiayiye.takeout.model.net
+package com.xiayiye.takeout.ui.adapter
 
-import com.xiayiye.takeout.model.beans.GoodsBean
-import com.xiayiye.takeout.model.beans.OrderBean
-import com.xiayiye.takeout.model.beans.ResponseInfo
-import com.xiayiye.takeout.model.beans.User
-import io.reactivex.Observable
-import retrofit2.Call
-import retrofit2.http.GET
+import android.view.View
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.PagerAdapter
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -37,36 +35,27 @@ import retrofit2.http.GET
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/5 17:45
+ * 创建时间：2020/3/8 13:28
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：XiaYiYeTakeOut
- * 文件包名：com.xiayiye.takeout.model.net
+ * 文件包名：com.xiayiye.takeout.ui.adapter
  * 文件说明：
  */
-interface TakeOutService {
-    //获取首页数据的接口
-    @GET("take_out_home")
-    fun getHomeInfo(): Call<ResponseInfo>
+class BusinessAdapter(
+    private val list: List<Fragment>, private val listTitle: List<String>,
+    fm: FragmentManager
+) : FragmentPagerAdapter(fm) {
+    override fun getItem(position: Int): Fragment {
+        return list[position]
+    }
 
-    @GET("take_out_login")
-    fun login(): Call<User>
+    override fun getCount(): Int = list.size
 
-    @GET("take_out_order")
-    fun getAllOrder(): Call<OrderBean>
 
-    //获取首页数据的接口
-    @GET("take_out_home")
-    fun getHomeInfoByRxJava(): Observable<ResponseInfo>
-
-    @GET("take_out_login")
-    fun loginByRxJava(): Observable<User>
-
-    @GET("take_out_order")
-    fun getAllOrderByRxJava(): Observable<OrderBean>
-
-    @GET("take_out_goods")
-    fun getAllGoodByJava(): Observable<GoodsBean>
+    override fun getPageTitle(position: Int): CharSequence? {
+        return listTitle[position]
+    }
 }

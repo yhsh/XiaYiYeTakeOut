@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fl_Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,81 +10,75 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Space
+        <com.flipboard.bottomsheet.BottomSheetLayout
+            android:id="@+id/bottomSheetLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1">
 
-        <!-- <com.flipboard.bottomsheet.BottomSheetLayout
-             android:id="@+id/bottomSheetLayout"
-             android:layout_width="match_parent"
-             android:layout_height="0dp"
-             android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="false"
+                android:orientation="vertical">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#f6f89191"
+                    android:orientation="horizontal"
+                    android:paddingTop="25dp"
+                    android:paddingBottom="10dp">
 
-             <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:fitsSystemWindows="false"
-                 android:orientation="vertical">
+                    <ImageButton
+                        android:id="@+id/ib_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:background="@mipmap/abc_ic_ab_back_mtrl_am_alpha" />
 
-                 <LinearLayout
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:background="#f6f89191"
-                     android:orientation="horizontal"
-                     android:paddingTop="25dp"
-                     android:paddingBottom="10dp">
+                    <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:singleLine="true"
+                        android:text="田老师红烧肉(东北旺西路店)"
+                        android:textColor="#fff"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-                     <ImageButton
-                         android:id="@+id/ib_back"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_gravity="center_vertical"
-                         android:layout_marginLeft="10dp"
-                         android:background="@drawable/abc_ic_ab_back_mtrl_am_alpha" />
-
-                     <TextView
-                         android:id="@+id/tv_title"
-                         android:layout_width="0dp"
-                         android:layout_height="wrap_content"
-                         android:layout_gravity="center_vertical"
-                         android:layout_marginLeft="10dp"
-                         android:layout_marginRight="10dp"
-                         android:layout_weight="1"
-                         android:singleLine="true"
-                         android:text="田老师红烧肉(东北旺西路店)"
-                         android:textColor="#fff"
-                         android:textSize="20sp"
-                         android:textStyle="bold" />
-
-                     <ImageButton
-                         android:id="@+id/ib_menu"
-                         android:layout_width="wrap_content"
-                         android:layout_height="wrap_content"
-                         android:layout_gravity="center_vertical"
-                         android:layout_marginRight="10dp"
-                         android:background="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha" />
-                 </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/ib_menu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:background="@mipmap/abc_ic_menu_moreoverflow_mtrl_alpha" />
+                </LinearLayout>
 
 
-                 <android.support.design.widget.TabLayout
-                     android:id="@+id/tabs"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     app:tabIndicatorColor="#00f"
-                     app:tabIndicatorHeight="4dp"
-                     app:tabSelectedTextColor="#00f"
-                     app:tabTextColor="#000" />
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:tabIndicatorColor="#00f"
+                    app:tabIndicatorHeight="4dp"
+                    app:tabSelectedTextColor="#00f"
+                    app:tabTextColor="#000" />
 
-                 <androidx.viewpager.widget.ViewPager
-                     android:id="@+id/vp"
-                     android:layout_width="match_parent"
-                     android:layout_height="0dp"
-                     android:layout_weight="1" />
-             </LinearLayout>
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/vp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
-         </com.flipboard.bottomsheet.BottomSheetLayout>-->
+        </com.flipboard.bottomsheet.BottomSheetLayout>
 
         <LinearLayout
             android:id="@+id/bottom"

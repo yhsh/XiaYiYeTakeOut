@@ -2,7 +2,13 @@ package com.xiayiye.takeout.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.xiayiye.takeout.R
+import com.xiayiye.takeout.ui.adapter.BusinessAdapter
+import com.xiayiye.takeout.ui.fragment.CommentsFragment
+import com.xiayiye.takeout.ui.fragment.GoodsFragment
+import com.xiayiye.takeout.ui.fragment.SellerFragment
+import kotlinx.android.synthetic.main.activity_business.*
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -43,8 +49,12 @@ import com.xiayiye.takeout.R
  * 文件说明：商家店铺页面
  */
 class BusinessActivity : AppCompatActivity() {
+    private val list = listOf<Fragment>(GoodsFragment(), SellerFragment(), CommentsFragment())
+    private val listTitle = listOf<String>("商品", "商家", "评论")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_business)
+        vp.adapter = BusinessAdapter(list, listTitle, supportFragmentManager)
+        tabs.setupWithViewPager(vp)
     }
 }

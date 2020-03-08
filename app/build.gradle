@@ -37,6 +37,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled = true
         signingConfig signingConfigs.release
     }
     buildTypes {
@@ -102,4 +103,9 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'//配合Rxjava 使用
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'//添加HttpLoggingInterceptor进行调试
+    //商家店铺种类切换控件
+    implementation 'com.flipboard:bottomsheet-core:1.5.3'
+    implementation 'com.flipboard:bottomsheet-commons:1.5.3'
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'se.emilsjolander:stickylistheaders:2.7.0'
 }
