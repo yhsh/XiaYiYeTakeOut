@@ -117,6 +117,8 @@ class GoodsAdapter(
                 //设置红点的数量
                 processRedNotCount(false, position)
                 setShopNumber(oldCount, goodViewHolder, position)
+                //更新购物车数量和价格
+                (goodsFragment.activity as BusinessActivity).updateCarUi()
             }
         }
         goodViewHolder.btAdd.setOnClickListener {
@@ -149,6 +151,8 @@ class GoodsAdapter(
             //执行抛物线动画
             val animationSet = setAnimation(ib, outLocation, destLocation)
             ib.startAnimation(animationSet)
+            //更新购物车数量和价格
+            (goodsFragment.activity as BusinessActivity).updateCarUi()
         }
         return itemView
     }

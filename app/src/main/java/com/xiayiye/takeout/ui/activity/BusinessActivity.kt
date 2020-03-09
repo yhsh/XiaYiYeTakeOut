@@ -1,15 +1,17 @@
 package com.xiayiye.takeout.ui.activity
 
-import android.location.Location
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.xiayiye.takeout.R
+import com.xiayiye.takeout.model.beans.Goods
 import com.xiayiye.takeout.ui.adapter.BusinessAdapter
 import com.xiayiye.takeout.ui.fragment.CommentsFragment
 import com.xiayiye.takeout.ui.fragment.GoodsFragment
 import com.xiayiye.takeout.ui.fragment.SellerFragment
+import com.xiayiye.takeout.utils.PriceFormater
 import kotlinx.android.synthetic.main.activity_business.*
 
 /*
@@ -72,5 +74,28 @@ class BusinessActivity : AppCompatActivity() {
         val outLocation = IntArray(2)
         imgCart.getLocationInWindow(outLocation)
         return outLocation
+    }
+
+    fun updateCarUi() {
+        var count = 0
+        var totalPrice = 0.0f
+        val goodsFragment: GoodsFragment = list[0] as GoodsFragment
+        val cartList: ArrayList<Goods> = goodsFragment.goodsFragmentPresenter.getCarList()
+        for (i in 0 until cartList.size) {
+            count += cartList[i].count
+            val oneGoodPrice = cartList[i].newPrice.toFloat() * cartList[i].count
+            totalPrice += oneGoodPrice
+        }
+        if (count > 0) {
+            //显示
+            tvCountPrice.visibility = View.VISIBLE
+            tvSelectNum.visibility = View.VISIBLE
+            tvCountPrice.text = PriceFormater.format(totalPrice)
+            tvSelectNum.text = count.toString()
+        } else {
+            //隐藏
+            tvCountPrice.visibility = View.GONE
+            tvSelectNum.visibility = View.GONE
+        }
     }
 }

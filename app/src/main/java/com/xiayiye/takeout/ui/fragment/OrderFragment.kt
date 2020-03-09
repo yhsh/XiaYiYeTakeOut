@@ -103,7 +103,7 @@ class OrderFragment : Fragment(), Observer {
     }
 
     fun onFail() {
-        context?.let { Toast.makeText(context, "服务器繁忙", Toast.LENGTH_SHORT).show() }
+        activity?.let { Toast.makeText(context, "服务器繁忙", Toast.LENGTH_SHORT).show() }
         srl_order?.let { srl_order.isRefreshing = false }
     }
 }

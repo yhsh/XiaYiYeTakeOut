@@ -8,6 +8,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.ArrayList
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -48,7 +49,7 @@ import io.reactivex.schedulers.Schedulers
  * 文件说明：获取店铺信息
  */
 class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
-    val allTypeGood = arrayListOf<Goods>()
+    val allTypeGoodList = arrayListOf<Goods>()
     lateinit var goodData: List<GoodData>
     fun getGoodListUrl() {
         takeOutService.getAllGoodByJava().subscribeOn(Schedulers.io())
@@ -72,9 +73,9 @@ class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
                             goodsInfo.typeId = goodTypeInfo.id
                             goodsInfo.typeName = goodTypeInfo.name
                         }
-                        allTypeGood.addAll(aTypeList)
+                        allTypeGoodList.addAll(aTypeList)
                     }
-                    goodFragment.onSuccess(goodBean, allTypeGood)
+                    goodFragment.onSuccess(goodBean, allTypeGoodList)
                 }
 
                 override fun onError(e: Throwable) {
@@ -86,8 +87,8 @@ class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
     fun getGoodPositionByTypeId(id: Int): Int {
         // -1 表示未找到
         var position = -1
-        for (index in 0 until allTypeGood.size) {
-            if (id == allTypeGood[index].typeId) {
+        for (index in 0 until allTypeGoodList.size) {
+            if (id == allTypeGoodList[index].typeId) {
                 position = index
                 break
             }
@@ -105,5 +106,19 @@ class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
             }
         }
         return position
+    }
+
+    /**
+     * 拿到购物车添加的数量
+     */
+    fun getCarList(): ArrayList<Goods> {
+        val cartList = arrayListOf<Goods>()
+        for (index in 0 until allTypeGoodList.size) {
+            if (allTypeGoodList[index].count > 0) {
+                //添加到集合
+                cartList.add(allTypeGoodList[index])
+            }
+        }
+        return cartList
     }
 }

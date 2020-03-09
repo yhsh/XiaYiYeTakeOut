@@ -113,6 +113,6 @@ class GoodsFragment : Fragment() {
     }
 
     fun onFail() {
-        Toast.makeText(context, "服务器请求出错", Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, "服务器请求出错", Toast.LENGTH_SHORT).show()
     }
 }
