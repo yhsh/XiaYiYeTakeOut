@@ -68,7 +68,7 @@ class CartRvAdapter(
     override fun getItemCount(): Int = cartList.size
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        holder.bindView(cartList[position], context, this@CartRvAdapter)
+        holder.bindView(cartList[position], context, this@CartRvAdapter, cartList)
     }
 
     class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -80,7 +80,8 @@ class CartRvAdapter(
         fun bindView(
             goods: Goods,
             context: BusinessActivity,
-            cartRvAdapter: CartRvAdapter
+            cartRvAdapter: CartRvAdapter,
+            cartList: ArrayList<Goods>
         ) {
             tvName.text = goods.from
             tvTypeAllPrice.text = PriceFormater.format(goods.newPrice.toFloat() * goods.count)
@@ -91,10 +92,18 @@ class CartRvAdapter(
                     false,
                     goods,
                     context,
-                    cartRvAdapter
+                    cartRvAdapter, cartList
                 )
             }
-            ibAdd.setOnClickListener { doAddAndMinusOperation(true, goods, context, cartRvAdapter) }
+            ibAdd.setOnClickListener {
+                doAddAndMinusOperation(
+                    true,
+                    goods,
+                    context,
+                    cartRvAdapter,
+                    cartList
+                )
+            }
         }
 
         /**
@@ -104,7 +113,8 @@ class CartRvAdapter(
             add: Boolean,
             goods: Goods,
             context: BusinessActivity,
-            cartRvAdapter: CartRvAdapter
+            cartRvAdapter: CartRvAdapter,
+            cartList: ArrayList<Goods>
         ) {
             //改变数量,刷新UI
             var changeCount = goods.count
@@ -118,15 +128,19 @@ class CartRvAdapter(
                     changeCount--
                 }
                 if (changeCount == 0) {
-                    //隐藏减号按钮
-                    ibMinus.visibility = View.INVISIBLE
+                    //删除购物车中数量为 0 的商品
+                    cartList.remove(goods)
+                }
+                if (cartList.size == 0) {
+                    //隐藏弹出的商品列表
+                    context.showOrHideCar()
                 }
             }
+            val goodsFragment = context.list[0] as GoodsFragment
             goods.count = changeCount
             //刷新UI
             cartRvAdapter.notifyDataSetChanged()
             //刷新右侧商品列表数量
-            val goodsFragment = context.list[0] as GoodsFragment
             goodsFragment.goodsAdapter.notifyDataSetChanged()
 
             //刷新左侧分类数量

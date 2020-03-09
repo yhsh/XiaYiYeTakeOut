@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -67,13 +69,13 @@ class BusinessActivity : AppCompatActivity() {
         setContentView(R.layout.activity_business)
         vp.adapter = BusinessAdapter(list, listTitle, supportFragmentManager)
         tabs.setupWithViewPager(vp)
-        bottom.setOnClickListener { showCar() }
+        bottom.setOnClickListener { showOrHideCar() }
     }
 
     /**
-     * 显示购物车商品
+     * 显示和隐藏购物车商品的方法
      */
-    private fun showCar() {
+    fun showOrHideCar() {
         bottomSheetView = LayoutInflater.from(this)
             .inflate(R.layout.cart_list, window.decorView as ViewGroup, false)
         //判断购物车是否显示
@@ -81,13 +83,53 @@ class BusinessActivity : AppCompatActivity() {
             //隐藏购物车商品
             bottomSheetLayout.dismissSheet()
         } else {
-            //显示购物车商品
-            bottomSheetLayout.showWithSheetView(bottomSheetView)
-            //展示购物车数据
-            val rvCart = bottomSheetView.findViewById<RecyclerView>(R.id.rvCart)
-            rvCart.layoutManager = LinearLayoutManager(this)
             //购物车为空,不显示
-            cartList?.let { rvCart.adapter = CartRvAdapter(this, it) }
+            cartList?.let {
+                if (it.size > 0) {
+                    //显示购物车商品
+                    bottomSheetLayout.showWithSheetView(bottomSheetView)
+                    //展示购物车数据
+                    val rvCart = bottomSheetView.findViewById<RecyclerView>(R.id.rvCart)
+                    val tvClear = bottomSheetView.findViewById<TextView>(R.id.tvClear)
+                    rvCart.layoutManager = LinearLayoutManager(this)
+                    val cartRvAdapter = CartRvAdapter(this, it)
+                    rvCart.adapter = cartRvAdapter
+                    tvClear.setOnClickListener(object : View.OnClickListener {
+                        override fun onClick(p0: View?) {
+                            //清空购物车
+                            val dialog = AlertDialog.Builder(this@BusinessActivity)
+                            dialog.setTitle("提示").setMessage("确认不吃了吗？")
+                                .setPositiveButton("确认") { p0, p1 ->
+                                    val goodsFragment = list[0] as GoodsFragment
+                                    //清空数据集合
+                                    goodsFragment.goodsFragmentPresenter.clearCart()
+                                    //刷新购物车
+                                    cartRvAdapter.notifyDataSetChanged()
+                                    showOrHideCar()
+                                    //刷新左边种类
+                                    goodsFragment.goodsAdapter.notifyDataSetChanged()
+                                    clearRedPoint()
+                                    //刷新右边商品
+                                    goodsFragment.goodTypeRvAdapter.notifyDataSetChanged()
+                                    //更新下购物车
+                                    updateCarUi()
+                                }
+                                .setNegativeButton("取消") { p0, p1 -> p0?.dismiss() }
+                            dialog.show()
+                        }
+                    })
+                }
+            }
+        }
+    }
+
+    /**
+     * 清空购物车后联动清空左边种类小红点的方法
+     */
+    private fun clearRedPoint() {
+        val goodTypeList = (list[0] as GoodsFragment).goodsFragmentPresenter.goodData
+        for (i in 0 until goodTypeList.size) {
+            goodTypeList[i].redPointCount = 0
         }
     }
 

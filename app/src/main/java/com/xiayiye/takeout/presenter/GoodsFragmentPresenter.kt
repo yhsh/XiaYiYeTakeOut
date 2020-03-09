@@ -8,7 +8,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import java.util.ArrayList
+import java.util.*
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -120,5 +120,15 @@ class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
             }
         }
         return cartList
+    }
+
+    /**
+     * 清空购物车的方法
+     */
+    fun clearCart() {
+        val carList = getCarList()
+        for (i in 0 until carList.size) {
+            carList[i].count = 0
+        }
     }
 }
