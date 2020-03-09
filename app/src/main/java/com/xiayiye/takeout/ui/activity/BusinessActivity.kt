@@ -1,13 +1,18 @@
 package com.xiayiye.takeout.ui.activity
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.Goods
 import com.xiayiye.takeout.ui.adapter.BusinessAdapter
+import com.xiayiye.takeout.ui.adapter.CartRvAdapter
 import com.xiayiye.takeout.ui.fragment.CommentsFragment
 import com.xiayiye.takeout.ui.fragment.GoodsFragment
 import com.xiayiye.takeout.ui.fragment.SellerFragment
@@ -53,13 +58,37 @@ import kotlinx.android.synthetic.main.activity_business.*
  * 文件说明：商家店铺页面
  */
 class BusinessActivity : AppCompatActivity() {
-    private val list = listOf<Fragment>(GoodsFragment(), SellerFragment(), CommentsFragment())
+    val list = listOf<Fragment>(GoodsFragment(), SellerFragment(), CommentsFragment())
+    private lateinit var bottomSheetView: View
+    private var cartList: ArrayList<Goods>? = null
     private val listTitle = listOf<String>("商品", "商家", "评论")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_business)
         vp.adapter = BusinessAdapter(list, listTitle, supportFragmentManager)
         tabs.setupWithViewPager(vp)
+        bottom.setOnClickListener { showCar() }
+    }
+
+    /**
+     * 显示购物车商品
+     */
+    private fun showCar() {
+        bottomSheetView = LayoutInflater.from(this)
+            .inflate(R.layout.cart_list, window.decorView as ViewGroup, false)
+        //判断购物车是否显示
+        if (bottomSheetLayout.isSheetShowing) {
+            //隐藏购物车商品
+            bottomSheetLayout.dismissSheet()
+        } else {
+            //显示购物车商品
+            bottomSheetLayout.showWithSheetView(bottomSheetView)
+            //展示购物车数据
+            val rvCart = bottomSheetView.findViewById<RecyclerView>(R.id.rvCart)
+            rvCart.layoutManager = LinearLayoutManager(this)
+            //购物车为空,不显示
+            cartList?.let { rvCart.adapter = CartRvAdapter(this, it) }
+        }
     }
 
     //添加加号按钮到activity上面
@@ -80,11 +109,13 @@ class BusinessActivity : AppCompatActivity() {
         var count = 0
         var totalPrice = 0.0f
         val goodsFragment: GoodsFragment = list[0] as GoodsFragment
-        val cartList: ArrayList<Goods> = goodsFragment.goodsFragmentPresenter.getCarList()
-        for (i in 0 until cartList.size) {
-            count += cartList[i].count
-            val oneGoodPrice = cartList[i].newPrice.toFloat() * cartList[i].count
-            totalPrice += oneGoodPrice
+        cartList = goodsFragment.goodsFragmentPresenter.getCarList()
+        cartList?.let {
+            for (i in 0 until it.size) {
+                count += it[i].count
+                val oneGoodPrice = it[i].newPrice.toFloat() * it[i].count
+                totalPrice += oneGoodPrice
+            }
         }
         if (count > 0) {
             //显示
@@ -94,8 +125,8 @@ class BusinessActivity : AppCompatActivity() {
             tvSelectNum.text = count.toString()
         } else {
             //隐藏
-            tvCountPrice.visibility = View.GONE
-            tvSelectNum.visibility = View.GONE
+            tvCountPrice.visibility = View.INVISIBLE
+            tvSelectNum.visibility = View.INVISIBLE
         }
     }
 }

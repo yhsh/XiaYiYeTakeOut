@@ -57,6 +57,7 @@ import kotlinx.android.synthetic.main.fragment_goods.*
 class GoodsFragment : Fragment() {
     val goodsFragmentPresenter by lazy { GoodsFragmentPresenter(this) }
     lateinit var goodTypeRvAdapter: GoodTypeRvAdapter
+    lateinit var goodsAdapter: GoodsAdapter
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -79,7 +80,8 @@ class GoodsFragment : Fragment() {
     ) {
         goodTypeRvAdapter = GoodTypeRvAdapter(goodBean.goodData, this)
         rv_goods_type.adapter = goodTypeRvAdapter
-        slhlv.adapter = GoodsAdapter(this, allTypeGood)
+        goodsAdapter = GoodsAdapter(this, allTypeGood)
+        slhlv.adapter = goodsAdapter
         //数据展示成功后再设置滑动监听
         slhlv.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScroll(

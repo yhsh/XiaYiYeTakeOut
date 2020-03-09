@@ -98,6 +98,8 @@ class GoodsAdapter(
         goodViewHolder.tvForm.text = itemTypeData.from
         Picasso.with(parent?.context).load(itemTypeData.icon).into(goodViewHolder.ivIcon)
         if (itemTypeData.count > 0) {
+            //设置数量
+            goodViewHolder.tvCount.text = itemTypeData.count.toString()
             goodViewHolder.tvCount.visibility = View.VISIBLE
             goodViewHolder.btMinus.visibility = View.VISIBLE
         } else {
