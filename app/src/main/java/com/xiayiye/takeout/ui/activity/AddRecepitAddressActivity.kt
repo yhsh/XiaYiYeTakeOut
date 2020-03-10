@@ -1,10 +1,9 @@
 package com.xiayiye.takeout.ui.activity
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.xiayiye.takeout.R
-import kotlinx.android.synthetic.main.activity_confirm_order.*
+import kotlinx.android.synthetic.main.activity_add_edit_receipt_address.*
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -35,31 +34,23 @@ import kotlinx.android.synthetic.main.activity_confirm_order.*
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/10 20:50
+ * 创建时间：2020/3/10 21:38
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：XiaYiYeTakeOut
  * 文件包名：com.xiayiye.takeout.ui.activity
- * 文件说明：确认提交订单页面
+ * 文件说明：增加和修改地址页面
  */
-class ConfirmOrderActivity : AppCompatActivity() {
+class AddRecepitAddressActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_confirm_order)
+        setContentView(R.layout.activity_add_edit_receipt_address)
         initListener()
     }
 
     private fun initListener() {
-        rl_location.setOnClickListener {
-            startActivity(
-                Intent(
-                    this,
-                    AddRecepitAddressActivity::class.java
-                )
-            )
-        }
         ib_back.setOnClickListener { finish() }
     }
 }

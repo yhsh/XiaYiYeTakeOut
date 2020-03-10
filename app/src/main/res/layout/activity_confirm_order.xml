@@ -73,7 +73,7 @@
                             android:layout_height="wrap_content"
                             android:text="黑马程序员"
                             android:textColor="#000"
-                            android:textSize="18sp"
+                            android:textSize="16sp"
                             android:textStyle="bold" />
 
                         <TextView

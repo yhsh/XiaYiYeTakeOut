@@ -46,10 +46,11 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:singleLine="true"
                         android:text="田老师红烧肉(东北旺西路店)"
                         android:textColor="#fff"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textStyle="bold" />
 
                     <ImageButton
