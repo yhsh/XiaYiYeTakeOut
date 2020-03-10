@@ -2,6 +2,7 @@ package com.xiayiye.takeout.ui.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -14,6 +15,8 @@ import com.squareup.picasso.Picasso
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.Seller
 import com.xiayiye.takeout.ui.activity.BusinessActivity
+import com.xiayiye.takeout.utils.LogTools
+import com.xiayiye.takeout.utils.TakeOutApplication
 import org.jetbrains.anko.find
 
 /*
@@ -92,7 +95,7 @@ class HomeRvAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.Vi
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == TYPE_TITLE) {
-            (holder as TittleViewHolder).bindData("我是大哥…………………………")
+            (holder as TittleViewHolder).bindData()
         } else {
             (holder as SellerViewHolder).bindData(mDatas[position - 1])
         }
@@ -103,7 +106,7 @@ class HomeRvAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.Vi
     inner class TittleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var sliderLayout: SliderLayout = itemView.findViewById(R.id.slider)
 
-        fun bindData(data: String) {
+        fun bindData() {
             if (urlMap.size == 0) {
                 urlMap["全场四折"] =
                     "http://img0.imgtn.bdimg.com/it/u=2128568984,3003092150&fm=26&gp=0.jpg";
@@ -129,6 +132,7 @@ class HomeRvAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.Vi
         private val tvHomeDistance: TextView
         private val ratingBar: RatingBar
         private val sellerLogo: ImageView
+        private lateinit var mSeller: Seller
 
         init {
             tvTittle = itemView.findViewById(R.id.tv_title)
@@ -139,23 +143,31 @@ class HomeRvAdapter(val context: Context) : RecyclerView.Adapter<RecyclerView.Vi
             sellerLogo = itemView.find(R.id.seller_logo)
             //跳转商家店铺页面
             itemView.setOnClickListener {
-                context.startActivity(
-                    Intent(
-                        context,
-                        BusinessActivity::class.java
-                    )
-                )
+                val intent = Intent(context, BusinessActivity::class.java)
+                val sellerCount =
+                    TakeOutApplication.sInstance.queryCacheSelectedInfoBySellerId(mSeller.id.toInt())
+                if (sellerCount > 0) {
+                    //有缓存
+                    intent.putExtra("hasSelectInfo", true)
+                } else {
+                    intent.putExtra("hasSelectInfo", false)
+                }
+                intent.putExtra("mSeller", mSeller)
+                context.startActivity(intent)
+                LogTools.showPrintln("打印保存信息${TakeOutApplication.sInstance.infos}")
             }
         }
 
-        fun bindData(data: Seller) {
-            tvTittle.text = data.name
-            tvHomeSale.text = data.sale
+        fun bindData(seller: Seller) {
+            this.mSeller = seller
+            tvTittle.text = seller.name
+            tvHomeSale.text = seller.sale
             tvHomeSendPrice.text =
-                StringBuffer("￥").append(data.sendPrice).append("起送/配送费￥").append(data.deliveryFee)
-            tvHomeDistance.text = data.distance
-            ratingBar.rating = data.score!!.toFloat()
-            Picasso.with(context).load(data.icon).into(sellerLogo)
+                StringBuffer("￥").append(seller.sendPrice).append("起送/配送费￥")
+                    .append(seller.deliveryFee)
+            tvHomeDistance.text = seller.distance
+            ratingBar.rating = seller.score!!.toFloat()
+            Picasso.with(context).load(seller.icon).into(sellerLogo)
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.xiayiye.takeout.ui.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.OrderData
+import com.xiayiye.takeout.utils.LogTools
 import com.xiayiye.takeout.utils.OrderChangeFunction
 import org.json.JSONObject
 import java.util.*
@@ -59,7 +59,7 @@ class OrderRvAdapter(private val context: Context, private val orderList: List<O
         val jsonObject = JSONObject(pushKeyAndValue as String)
         val orderId = jsonObject.optString("id")
         val orderType = jsonObject.optString("type")
-        Log.e("打印推送TakeOutReceiver", "$orderId=$orderType")
+        LogTools.showLog("打印推送TakeOutReceiver", "$orderId=$orderType")
         for (index in 0 until orderList.size) {
             val orderDataStatus = orderList.get(index)
             if (orderDataStatus.id == orderId) {

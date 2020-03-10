@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.User
 import com.xiayiye.takeout.ui.activity.LoginActivity
+import com.xiayiye.takeout.utils.LogTools
 import kotlinx.android.synthetic.main.fragment_user.*
 
 /*
@@ -76,7 +77,7 @@ class UserFragment : Fragment() {
         if (requestCode == 666) {
             if (data != null) {
                 val user = (data.getSerializableExtra("user")) as User
-                println("打印用户${user.data.name}")
+                LogTools.showPrintln("打印用户${user.data.name}")
                 //登录成功
                 username.text =
                     StringBuffer("欢迎您,").append(user.data.name).append(user.data.phone.substring(6))

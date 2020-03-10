@@ -2,6 +2,8 @@ package com.xiayiye.takeout.utils
 
 import cn.jpush.android.api.JPushInterface
 import com.mob.MobApplication
+import com.xiayiye.takeout.model.beans.CacheSelectedInfo
+import java.util.concurrent.CopyOnWriteArrayList
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -42,10 +44,93 @@ import com.mob.MobApplication
  * 文件说明：
  */
 class TakeOutApplication : MobApplication() {
+    companion object {
+        lateinit var sInstance: TakeOutApplication
+    }
+
+    //点餐缓存集合
+    val infos = CopyOnWriteArrayList<CacheSelectedInfo>()
+    val ADD = 1
+    val MINUS = -1
     override fun onCreate() {
         super.onCreate()
         //初始化极光推送
         JPushInterface.setDebugMode(true);
         JPushInterface.init(this);
+        sInstance = this
+    }
+
+    fun queryCacheSelectedInfoByGoodsId(goodsId: Int): Int {
+        var count = 0
+        for (i in 0..infos.size - 1) {
+            val (_, _, goodsId1, count1) = infos[i]
+            if (goodsId1 == goodsId) {
+                count = count1
+                break
+            }
+        }
+        return count
+    }
+
+    fun queryCacheSelectedInfoByTypeId(typeId: Int): Int {
+        var count = 0
+        for (i in 0..infos.size - 1) {
+            val (_, typeId1, _, count1) = infos[i]
+            if (typeId1 == typeId) {
+                count += count1
+            }
+        }
+        return count
+    }
+
+    fun queryCacheSelectedInfoBySellerId(sellerId: Int): Int {
+        var count = 0
+        for (i in 0..infos.size - 1) {
+            val (sellerId1, _, _, count1) = infos[i]
+            if (sellerId1 == sellerId) {
+                count += count1
+            }
+        }
+        LogTools.showLog("打印id和数量${sellerId}==", count.toString())
+        return count
+    }
+
+    fun addCacheSelectedInfo(info: CacheSelectedInfo) {
+        LogTools.showPrintln("打印数量$infos")
+        infos.add(info)
+    }
+
+    fun clearCacheSelectedInfo(sellerId: Int) {
+        val temp = ArrayList<CacheSelectedInfo>()
+        for (i in 0..infos.size - 1) {
+            val info = infos[i]
+            if (info.sellerId == sellerId) {
+//                infos.remove(info)
+                temp.add(info)
+            }
+        }
+        infos.removeAll(temp)
+    }
+
+    fun deleteCacheSelectedInfo(goodsId: Int) {
+        for (i in 0..infos.size - 1) {
+            val info = infos[i]
+            if (info.goodsId == goodsId) {
+                infos.remove(info)
+                break
+            }
+        }
+    }
+
+    fun updateCacheSelectedInfo(goodsId: Int, operation: Int) {
+        for (i in 0..infos.size - 1) {
+            val info = infos[i]
+            if (info.goodsId == goodsId) {
+                when (operation) {
+                    ADD -> info.count = info.count + 1
+                    MINUS -> info.count = info.count - 1
+                }
+            }
+        }
     }
 }

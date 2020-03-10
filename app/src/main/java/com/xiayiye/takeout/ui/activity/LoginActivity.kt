@@ -3,7 +3,6 @@ package com.xiayiye.takeout.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import cn.smssdk.EventHandler
@@ -11,6 +10,7 @@ import cn.smssdk.SMSSDK
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.User
 import com.xiayiye.takeout.presenter.LoginActivityPresenter
+import com.xiayiye.takeout.utils.LogTools
 import com.xiayiye.takeout.utils.SMSUtil
 import kotlinx.android.synthetic.main.activity_login.*
 import org.json.JSONException
@@ -79,7 +79,7 @@ class LoginActivity : AppCompatActivity() {
             if (data is Throwable) {
                 val msg = data.message
                 msg?.let {
-                    Log.e("sms", msg)
+                    LogTools.showLog("sms", msg)
                     try {
                         val jsonObject = JSONObject(msg)
                         val detail = jsonObject.getString("detail")
@@ -93,9 +93,9 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                     timer.start()
-                    Log.e("sms", "获取验证码成功")
+                    LogTools.showLog("sms", "获取验证码成功")
                 } else if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
-                    Log.e("sms", "提交验证码成功。。。")
+                    LogTools.showLog("sms", "提交验证码成功。。。")
                     loginPhone = et_user_phone.text.toString().trim()
                     if (loginPhone.isNotEmpty()) {
                         //开始登录

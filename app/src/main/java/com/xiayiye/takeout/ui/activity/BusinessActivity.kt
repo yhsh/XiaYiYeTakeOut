@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.Goods
+import com.xiayiye.takeout.model.beans.Seller
 import com.xiayiye.takeout.ui.adapter.BusinessAdapter
 import com.xiayiye.takeout.ui.adapter.CartRvAdapter
 import com.xiayiye.takeout.ui.fragment.CommentsFragment
@@ -64,12 +65,25 @@ class BusinessActivity : AppCompatActivity() {
     private lateinit var bottomSheetView: View
     private var cartList: ArrayList<Goods>? = null
     private val listTitle = listOf<String>("商品", "商家", "评论")
+    var hasSelectInfo: Boolean = false
+    private lateinit var seller: Seller
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_business)
+        processIntent()
         vp.adapter = BusinessAdapter(list, listTitle, supportFragmentManager)
         tabs.setupWithViewPager(vp)
         bottom.setOnClickListener { showOrHideCar() }
+    }
+
+    private fun processIntent() {
+        if (intent.hasExtra("hasSelectInfo")) {
+            hasSelectInfo = intent.getBooleanExtra("hasSelectInfo", false)
+            seller = intent.getSerializableExtra("mSeller") as Seller
+            tvDeliveryFee.text =
+                StringBuffer("另需配送费").append(PriceFormater.format(seller.deliveryFee!!.toFloat()))
+            tvSendPrice.text = PriceFormater.format(seller.sendPrice!!.toFloat())
+        }
     }
 
     /**

@@ -3,6 +3,7 @@ package com.xiayiye.takeout.presenter
 import com.xiayiye.takeout.model.beans.ResponseData
 import com.xiayiye.takeout.model.beans.ResponseInfo
 import com.xiayiye.takeout.ui.fragment.HomeFragment
+import com.xiayiye.takeout.utils.LogTools
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -53,7 +54,7 @@ class HomeFragmentPresenter(private val homeFragment: HomeFragment) : NetPresent
         //TODO 异步获取接口数据
         /*takeOutService.getHomeInfo().enqueue(object : Callback<ResponseInfo> {
             override fun onFailure(call: Call<ResponseInfo>, t: Throwable) {
-                println("打印网络数据错误")
+                LogTools.showPrintln("打印网络数据错误")
                 homeFragment.context?.toast("请求服务器数据错误")
                 t.printStackTrace()
             }
@@ -95,7 +96,7 @@ class HomeFragmentPresenter(private val homeFragment: HomeFragment) : NetPresent
                 }
 
                 override fun onError(e: Throwable) {
-                    println("打印网络数据错误")
+                    LogTools.showPrintln("打印网络数据错误")
                     homeFragment.context?.toast("请求服务器数据错误")
                     e.printStackTrace()
                 }
@@ -106,7 +107,7 @@ class HomeFragmentPresenter(private val homeFragment: HomeFragment) : NetPresent
         val nearbySellerList = data?.nearbySellerList
         val otherSellerList = data?.otherSellerList
         if (nearbySellerList!!.isNotEmpty() && otherSellerList!!.isNotEmpty()) {
-            println("打印附近商家信息$nearbySellerList")
+            LogTools.showPrintln("打印附近商家信息$nearbySellerList")
             //有数据成功
             homeFragment.homeOnSuccess(nearbySellerList, otherSellerList)
         } else {

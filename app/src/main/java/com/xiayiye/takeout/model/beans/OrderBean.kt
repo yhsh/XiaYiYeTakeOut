@@ -87,3 +87,178 @@ data class Rider(
     val name: String,
     val phone: String
 )
+/*
+{
+  "code": "0",
+  "orderData": [
+    {
+      "detail": {
+        "address": "孝感米酒馆对面",
+        "pay": "1",
+        "phone": "13675452314",
+        "time": "2020/3/6 20:32",
+        "userName": "骑手配送1"
+      },
+      "distribution": {
+        "des": "快速配送",
+        "type": "1"
+      },
+      "goodsInfo": [
+        {
+          "bargainPrice": false,
+          "id": 0,
+          "isNew": false,
+          "monthSaleNum": 1,
+          "name": "三鲜牛肉面",
+          "newPrice": "12.00",
+          "oldPrice": "9.50",
+          "sellerId": 0
+        },
+        {
+          "bargainPrice": false,
+          "id": 1,
+          "isNew": false,
+          "monthSaleNum": 37,
+          "name": "康师傅水",
+          "newPrice": "3.00",
+          "oldPrice": "1.50",
+          "sellerId": 0
+        },
+        {
+          "bargainPrice": false,
+          "id": 2,
+          "isNew": false,
+          "monthSaleNum": 89,
+          "name": "大牛烧土豆",
+          "newPrice": "13.00",
+          "oldPrice": "8.50",
+          "sellerId": 0
+        }
+      ],
+      "id": "0001",
+      "orderSeller": {
+        "id": 0,
+        "name": "西安面庄"
+      },
+      "rider": {
+        "id": 1,
+        "name": "西安骑士",
+        "phone": "13736653243"
+      },
+      "type": "10"
+    },
+    {
+      "detail": {
+        "address": "槐荫大道100号",
+        "pay": "1",
+        "phone": "13675452314",
+        "time": "2020/3/6 22:08",
+        "userName": "骑手配送1"
+      },
+      "distribution": {
+        "des": "快速配送",
+        "type": "1"
+      },
+      "goodsInfo": [
+        {
+          "bargainPrice": false,
+          "id": 0,
+          "isNew": false,
+          "monthSaleNum": 1,
+          "name": "爱情麻辣烫",
+          "newPrice": "37.00",
+          "oldPrice": "29.50",
+          "sellerId": 0
+        },
+        {
+          "bargainPrice": false,
+          "id": 1,
+          "isNew": false,
+          "monthSaleNum": 37,
+          "name": "康师傅水",
+          "newPrice": "3.00",
+          "oldPrice": "1.50",
+          "sellerId": 0
+        },
+        {
+          "bargainPrice": false,
+          "id": 2,
+          "isNew": false,
+          "monthSaleNum": 89,
+          "name": "大牛烧土豆",
+          "newPrice": "13.00",
+          "oldPrice": "8.50",
+          "sellerId": 0
+        }
+      ],
+      "id": "0002",
+      "orderSeller": {
+        "id": 0,
+        "name": "槐荫大道香酥饭"
+      },
+      "rider": {
+        "id": 1,
+        "name": "槐荫大道骑士",
+        "phone": "13098765243"
+      },
+      "type": "20"
+    },
+    {
+      "detail": {
+        "address": "乾坤大酒店旁边",
+        "pay": "1",
+        "phone": "13785097842",
+        "time": "2020/3/1 10:39",
+        "userName": "骑手配送2"
+      },
+      "distribution": {
+        "des": "慢速配送",
+        "type": "2"
+      },
+      "goodsInfo": [
+        {
+          "bargainPrice": false,
+          "id": 0,
+          "isNew": false,
+          "monthSaleNum": 1,
+          "name": "青椒肉丝盖饭",
+          "newPrice": "17.00",
+          "oldPrice": "12.50",
+          "sellerId": 0
+        },
+        {
+          "bargainPrice": false,
+          "id": 1,
+          "isNew": false,
+          "monthSaleNum": 37,
+          "name": "康师傅水",
+          "newPrice": "3.00",
+          "oldPrice": "1.50",
+          "sellerId": 0
+        },
+        {
+          "bargainPrice": false,
+          "id": 2,
+          "isNew": false,
+          "monthSaleNum": 89,
+          "name": "大牛烧土豆",
+          "newPrice": "13.00",
+          "oldPrice": "8.50",
+          "sellerId": 0
+        }
+      ],
+      "id": "0003",
+      "orderSeller": {
+        "id": 0,
+        "name": "孝感米酒管"
+      },
+      "rider": {
+        "id": 1,
+        "name": "孝感骑士",
+        "phone": "15687435578"
+      },
+      "type": "30"
+    }
+  ]
+}
+ */

@@ -3,7 +3,10 @@ package com.xiayiye.takeout.presenter
 import com.xiayiye.takeout.model.beans.GoodData
 import com.xiayiye.takeout.model.beans.Goods
 import com.xiayiye.takeout.model.beans.GoodsBean
+import com.xiayiye.takeout.ui.activity.BusinessActivity
 import com.xiayiye.takeout.ui.fragment.GoodsFragment
+import com.xiayiye.takeout.utils.LogTools
+import com.xiayiye.takeout.utils.TakeOutApplication
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -64,12 +67,31 @@ class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
 
                 override fun onNext(goodBean: GoodsBean) {
                     goodData = goodBean.goodData
-                    println("打印商品信息$goodBean 商品种类个数：${goodData.size}")
+                    LogTools.showPrintln("打印商品信息$goodBean 商品种类个数：${goodData.size}")
                     for (i in goodData.indices) {
                         val goodTypeInfo = goodData.get(i)
+                        LogTools.showPrintln("打印id查询一${goodTypeInfo.id}")
                         val aTypeList = goodTypeInfo.listGoods
+                        //判断是否有点餐缓存
+                        val hasSelectInfo =
+                            (goodFragment.activity as BusinessActivity).hasSelectInfo
+                        var aTypeCount: Int = 0
+                        if (hasSelectInfo) {
+                            aTypeCount =
+                                TakeOutApplication.sInstance.queryCacheSelectedInfoByTypeId(
+                                    goodTypeInfo.id
+                                )
+                            goodTypeInfo.redPointCount = aTypeCount
+                        }
                         for (j in 0 until aTypeList.size) {
                             val goodsInfo = aTypeList[j]
+                            LogTools.showPrintln("打印id查询二${goodsInfo.id}")
+                            if (aTypeCount > 0) {
+                                goodsInfo.count =
+                                    TakeOutApplication.sInstance.queryCacheSelectedInfoByGoodsId(
+                                        goodsInfo.id
+                                    )
+                            }
                             goodsInfo.typeId = goodTypeInfo.id
                             goodsInfo.typeName = goodTypeInfo.name
                         }

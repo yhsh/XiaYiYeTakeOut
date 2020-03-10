@@ -3,7 +3,6 @@ package com.xiayiye.takeout.ui.adapter
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +13,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.xiayiye.takeout.R
+import com.xiayiye.takeout.model.beans.CacheSelectedInfo
 import com.xiayiye.takeout.model.beans.Goods
 import com.xiayiye.takeout.ui.activity.BusinessActivity
 import com.xiayiye.takeout.ui.fragment.GoodsFragment
+import com.xiayiye.takeout.utils.TakeOutApplication
 import org.jetbrains.anko.find
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter
 
@@ -114,6 +115,14 @@ class GoodsAdapter(
                     val animationSet = hideAnimation()
                     goodViewHolder.tvCount.startAnimation(animationSet)
                     goodViewHolder.btMinus.startAnimation(animationSet)
+                    //删除
+                    TakeOutApplication.sInstance.deleteCacheSelectedInfo(itemTypeData.id)
+                } else {
+                    //更新
+                    TakeOutApplication.sInstance.updateCacheSelectedInfo(
+                        itemTypeData.id,
+                        TakeOutApplication.sInstance.MINUS
+                    )
                 }
                 oldCount--
                 //设置红点的数量
@@ -129,6 +138,21 @@ class GoodsAdapter(
                 val animationSet = showAnimation()
                 goodViewHolder.tvCount.startAnimation(animationSet)
                 goodViewHolder.btMinus.startAnimation(animationSet)
+                //增加
+                TakeOutApplication.sInstance.addCacheSelectedInfo(
+                    CacheSelectedInfo(
+                        itemTypeData.sellerId,
+                        itemTypeData.typeId,
+                        itemTypeData.id,
+                        1
+                    )
+                )
+            } else {
+                //更新
+                TakeOutApplication.sInstance.updateCacheSelectedInfo(
+                    itemTypeData.id,
+                    TakeOutApplication.sInstance.ADD
+                )
             }
             oldCount++
             //设置红点的数量
@@ -142,7 +166,6 @@ class GoodsAdapter(
             //设置复制的加号的绝对值坐标
             ib.x = outLocation[0].toFloat()
             ib.y = outLocation[1].toFloat()
-            Log.e("打印X：", outLocation[0].toString() + "Y 轴：" + outLocation[1].toString())
             ((goodsFragment.activity) as BusinessActivity).addImageButton(
                 ib,
                 goodViewHolder.btAdd.width,

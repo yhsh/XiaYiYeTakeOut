@@ -49,7 +49,7 @@ class TakeOutPushReceiver : JPushMessageReceiver() {
     val TAG = "打印推送TakeOutPushReceiver"
     override fun onMessage(p0: Context?, p1: CustomMessage?) {
         super.onMessage(p0, p1)
-        Log.e("打印推送", "TakeOutPushReceiver")
+        LogTools.showLog("打印推送", "TakeOutPushReceiver")
     }
 
     /**
@@ -65,12 +65,12 @@ class TakeOutPushReceiver : JPushMessageReceiver() {
         * notificationBigPicPath='', notificationInbox='', notificationPriority=0, notificationCategory='',
         * developerArg0='', platform=0, notificationChannelId='', displayForeground='', notificationType=0}
         * */
-        Log.e(TAG, "[onNotifyMessageOpened] $message")
+        LogTools.showLog(TAG, "[onNotifyMessageOpened] $message")
 
     }
 
     override fun onMultiActionClicked(context: Context, intent: Intent) {
-        Log.e(TAG, "[onMultiActionClicked] 用户点击了通知栏按钮")
+        LogTools.showLog(TAG, "[onMultiActionClicked] 用户点击了通知栏按钮")
         val nActionExtra = intent.extras!!.getString(JPushInterface.EXTRA_NOTIFICATION_ACTION_EXTRA)
 
         //开发者根据不同 Action 携带的 extra 字段来分配不同的动作。
@@ -79,34 +79,34 @@ class TakeOutPushReceiver : JPushMessageReceiver() {
             return
         }
         if (nActionExtra == "my_extra1") {
-            Log.e(TAG, "[onMultiActionClicked] 用户点击通知栏按钮一")
+            LogTools.showLog(TAG, "[onMultiActionClicked] 用户点击通知栏按钮一")
         } else if (nActionExtra == "my_extra2") {
-            Log.e(TAG, "[onMultiActionClicked] 用户点击通知栏按钮二")
+            LogTools.showLog(TAG, "[onMultiActionClicked] 用户点击通知栏按钮二")
         } else if (nActionExtra == "my_extra3") {
-            Log.e(TAG, "[onMultiActionClicked] 用户点击通知栏按钮三")
+            LogTools.showLog(TAG, "[onMultiActionClicked] 用户点击通知栏按钮三")
         } else {
-            Log.e(TAG, "[onMultiActionClicked] 用户点击通知栏按钮未定义")
+            LogTools.showLog(TAG, "[onMultiActionClicked] 用户点击通知栏按钮未定义")
         }
     }
 
     override fun onNotifyMessageArrived(context: Context, message: NotificationMessage) {
-        Log.e(TAG, "[onNotifyMessageArrived] $message")
+        LogTools.showLog(TAG, "[onNotifyMessageArrived] $message")
     }
 
     override fun onNotifyMessageDismiss(context: Context?, message: NotificationMessage?) {
-        Log.e(TAG, "[onNotifyMessageDismiss] " + message!!)
+        LogTools.showLog(TAG, "[onNotifyMessageDismiss] " + message!!)
     }
 
     override fun onRegister(context: Context?, registrationId: String?) {
-        Log.e(TAG, "[onRegister] " + registrationId!!)
+        LogTools.showLog(TAG, "[onRegister] " + registrationId!!)
     }
 
     override fun onConnected(context: Context?, isConnected: Boolean) {
-        Log.e(TAG, "[onConnected] $isConnected")
+        LogTools.showLog(TAG, "[onConnected] $isConnected")
     }
 
     override fun onCommandResult(context: Context?, cmdMessage: CmdMessage?) {
-        Log.e(TAG, "[onCommandResult] " + cmdMessage!!)
+        LogTools.showLog(TAG, "[onCommandResult] " + cmdMessage!!)
     }
 
     override fun onTagOperatorResult(context: Context?, jPushMessage: JPushMessage?) {
@@ -132,6 +132,6 @@ class TakeOutPushReceiver : JPushMessageReceiver() {
 
     override fun onNotificationSettingsCheck(context: Context?, isOn: Boolean, source: Int) {
         super.onNotificationSettingsCheck(context, isOn, source)
-        Log.e(TAG, "[onNotificationSettingsCheck] isOn:$isOn,source:$source")
+        LogTools.showLog(TAG, "[onNotificationSettingsCheck] isOn:$isOn,source:$source")
     }
 }

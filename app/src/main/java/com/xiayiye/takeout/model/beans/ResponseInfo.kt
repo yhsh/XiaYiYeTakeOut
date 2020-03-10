@@ -9,12 +9,12 @@ class ResponseInfo {
     var data: ResponseData? = null
     /*
     下面是外卖首页的所有Json数据
-    {
+  {
   "code": "0",
   "data": {
     "categorieList": [
       {
-        "id": 1,
+        "id": 1040,
         "name": "李先生牛肉面",
         "pic": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583404846461&di=bac0f553cc3058cdabdeb685b912738e&imgtype=0&src=http%3A%2F%2Fimg.sccnn.com%2Fbimg%2F338%2F51218.jpg"
       },
@@ -33,7 +33,7 @@ class ResponseInfo {
         "distance": "200米/33分钟",
         "ensuer": "",
         "icon": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583404846461&di=bac0f553cc3058cdabdeb685b912738e&imgtype=0&src=http%3A%2F%2Fimg.sccnn.com%2Fbimg%2F338%2F51218.jpg",
-        "id": 1,
+        "id": 0,
         "invoice": "",
         "name": "附近第1家分店",
         "pic": "",
@@ -51,7 +51,7 @@ class ResponseInfo {
         "distance": "735米/43分钟",
         "ensuer": "",
         "icon": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583404846461&di=bac0f553cc3058cdabdeb685b912738e&imgtype=0&src=http%3A%2F%2Fimg.sccnn.com%2Fbimg%2F338%2F51218.jpg",
-        "id": 2,
+        "id": 1,
         "invoice": "",
         "name": "附近第2家分店",
         "pic": "",
@@ -69,7 +69,7 @@ class ResponseInfo {
         "distance": "1239米/63分钟",
         "ensuer": "",
         "icon": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583404846461&di=bac0f553cc3058cdabdeb685b912738e&imgtype=0&src=http%3A%2F%2Fimg.sccnn.com%2Fbimg%2F338%2F51218.jpg",
-        "id": 3,
+        "id": 2,
         "invoice": "",
         "name": "附近第3家分店",
         "pic": "",
@@ -89,7 +89,7 @@ class ResponseInfo {
         "distance": "2319米/73分钟",
         "ensuer": "",
         "icon": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583404846461&di=bac0f553cc3058cdabdeb685b912738e&imgtype=0&src=http%3A%2F%2Fimg.sccnn.com%2Fbimg%2F338%2F51218.jpg",
-        "id": 23,
+        "id": 3,
         "invoice": "",
         "name": "其他第二十三家分店",
         "pic": "",
@@ -107,7 +107,7 @@ class ResponseInfo {
         "distance": "996米/50分钟",
         "ensuer": "",
         "icon": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583404846461&di=bac0f553cc3058cdabdeb685b912738e&imgtype=0&src=http%3A%2F%2Fimg.sccnn.com%2Fbimg%2F338%2F51218.jpg",
-        "id": 24,
+        "id": 4,
         "invoice": "",
         "name": "其他第二十四家分店",
         "pic": "",

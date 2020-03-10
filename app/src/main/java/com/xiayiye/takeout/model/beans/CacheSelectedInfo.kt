@@ -1,9 +1,4 @@
-package com.xiayiye.takeout.utils
-
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import cn.jpush.android.api.JPushInterface
+package com.xiayiye.takeout.model.beans
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -34,26 +29,20 @@ import cn.jpush.android.api.JPushInterface
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/7 13:20
+ * 创建时间：2020/3/10 16:11
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：XiaYiYeTakeOut
- * 文件包名：com.xiayiye.takeout.utils
- * 文件说明：自定义推送消息的类
+ * 文件包名：com.xiayiye.takeout.model.beans
+ * 文件说明：userId 默认38
  */
-class TakeOutReceiver : BroadcastReceiver() {
-    override fun onReceive(p0: Context?, p1: Intent?) {
-        val message = p1?.extras?.getString(JPushInterface.EXTRA_MESSAGE)
-        val pushKeyAndValue = p1?.extras?.getString(JPushInterface.EXTRA_EXTRA)
-        message?.let {
-            LogTools.showLog("打印推送TakeOutReceiver", message)
-        }
-        pushKeyAndValue?.let {
-            LogTools.showLog("打印推送TakeOutReceiver", pushKeyAndValue)
-//            通过观察者模式更新订单状态
-            OrderChangeFunction.instance.changeOrderStatus(pushKeyAndValue)
-        }
-    }
+data class CacheSelectedInfo(
+    var sellerId: Int,
+    var typeId: Int,
+    var goodsId: Int,
+    var count: Int
+) {
+
 }

@@ -1,11 +1,11 @@
 package com.xiayiye.takeout.presenter
 
-import android.util.Log
 import android.widget.Toast
 import com.j256.ormlite.android.AndroidDatabaseConnection
 import com.xiayiye.takeout.model.beans.User
 import com.xiayiye.takeout.model.dao.TakeOutOpenHelper
 import com.xiayiye.takeout.ui.activity.LoginActivity
+import com.xiayiye.takeout.utils.LogTools
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -59,7 +59,7 @@ class LoginActivityPresenter(val loginActivity: LoginActivity) : NetPresenter() 
 
              override fun onResponse(call: Call<User>, response: Response<User>) {
                  val user = response.body()
-                 Log.e("打印登陆数据", user.toString() + Thread.currentThread().name)
+                 LogTools.showLog("打印登陆数据", user.toString() + Thread.currentThread().name)
                  if (user != null) {
                      loginSuccessData(user)
                  } else {
@@ -82,7 +82,7 @@ class LoginActivityPresenter(val loginActivity: LoginActivity) : NetPresenter() 
                 }
 
                 override fun onNext(user: User) {
-                    Log.e("打印登陆数据", user.toString() + Thread.currentThread().name)
+                    LogTools.showLog("打印登陆数据", user.toString() + Thread.currentThread().name)
                     loginSuccessData(user)
                 }
 
