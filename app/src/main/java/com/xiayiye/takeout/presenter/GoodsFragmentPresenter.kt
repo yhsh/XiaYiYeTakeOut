@@ -97,6 +97,8 @@ class GoodsFragmentPresenter(val goodFragment: GoodsFragment) : NetPresenter() {
                         }
                         allTypeGoodList.addAll(aTypeList)
                     }
+                    //更新购物车的UI
+                    (goodFragment.activity as BusinessActivity).updateCarUi()
                     goodFragment.onSuccess(goodBean, allTypeGoodList)
                 }
 

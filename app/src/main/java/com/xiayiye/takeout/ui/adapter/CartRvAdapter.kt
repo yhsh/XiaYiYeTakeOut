@@ -11,6 +11,7 @@ import com.xiayiye.takeout.model.beans.Goods
 import com.xiayiye.takeout.ui.activity.BusinessActivity
 import com.xiayiye.takeout.ui.fragment.GoodsFragment
 import com.xiayiye.takeout.utils.PriceFormater
+import com.xiayiye.takeout.utils.TakeOutApplication
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -123,13 +124,25 @@ class CartRvAdapter(
                 if (changeCount == 1) {
                     ibMinus.visibility = View.VISIBLE
                 }
+                //更新缓存
+                TakeOutApplication.sInstance.updateCacheSelectedInfo(
+                    goods.id,
+                    TakeOutApplication.sInstance.ADD
+                )
             } else {
                 if (changeCount >= 1) {
                     changeCount--
+                    //更新缓存
+                    TakeOutApplication.sInstance.updateCacheSelectedInfo(
+                        goods.id,
+                        TakeOutApplication.sInstance.MINUS
+                    )
                 }
                 if (changeCount == 0) {
                     //删除购物车中数量为 0 的商品
                     cartList.remove(goods)
+                    //删除缓存
+                    TakeOutApplication.sInstance.deleteCacheSelectedInfo(goods.id)
                 }
                 if (cartList.size == 0) {
                     //隐藏弹出的商品列表

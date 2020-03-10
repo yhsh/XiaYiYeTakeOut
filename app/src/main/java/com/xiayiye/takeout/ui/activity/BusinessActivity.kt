@@ -1,5 +1,6 @@
 package com.xiayiye.takeout.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ import com.xiayiye.takeout.ui.fragment.CommentsFragment
 import com.xiayiye.takeout.ui.fragment.GoodsFragment
 import com.xiayiye.takeout.ui.fragment.SellerFragment
 import com.xiayiye.takeout.utils.PriceFormater
+import com.xiayiye.takeout.utils.TakeOutApplication
 import kotlinx.android.synthetic.main.activity_business.*
 
 /*
@@ -80,9 +82,9 @@ class BusinessActivity : AppCompatActivity() {
         if (intent.hasExtra("hasSelectInfo")) {
             hasSelectInfo = intent.getBooleanExtra("hasSelectInfo", false)
             seller = intent.getSerializableExtra("mSeller") as Seller
-            tvDeliveryFee.text =
+            tvSendPrice.text =
                 StringBuffer("另需配送费").append(PriceFormater.format(seller.deliveryFee!!.toFloat()))
-            tvSendPrice.text = PriceFormater.format(seller.sendPrice!!.toFloat())
+            tvDeliveryFee.text = PriceFormater.format(seller.sendPrice!!.toFloat())
         }
     }
 
@@ -127,6 +129,8 @@ class BusinessActivity : AppCompatActivity() {
                                     goodsFragment.goodTypeRvAdapter.notifyDataSetChanged()
                                     //更新下购物车
                                     updateCarUi()
+                                    //清空所有缓存商品
+                                    TakeOutApplication.sInstance.clearCacheSelectedInfo(seller.id.toInt())
                                 }
                                 .setNegativeButton("取消") { p0, p1 -> p0?.dismiss() }
                             dialog.show()
@@ -179,9 +183,20 @@ class BusinessActivity : AppCompatActivity() {
             tvSelectNum.visibility = View.VISIBLE
             tvCountPrice.text = PriceFormater.format(totalPrice)
             tvSelectNum.text = count.toString()
+            if (totalPrice >= seller.sendPrice!!.toFloat()) {
+                tvSubmit.visibility = View.VISIBLE
+                tvDeliveryFee.visibility = View.GONE
+                //能提交再开始提交的点击事件
+                tvSubmit.setOnClickListener {
+                    startActivity(Intent(this, ConfirmOrderActivity::class.java))
+                }
+            } else {
+                tvSubmit.visibility = View.GONE
+                tvDeliveryFee.visibility = View.VISIBLE
+            }
         } else {
             //隐藏
-            tvCountPrice.visibility = View.INVISIBLE
+            tvCountPrice.text = "￥0"
             tvSelectNum.visibility = View.INVISIBLE
         }
     }
