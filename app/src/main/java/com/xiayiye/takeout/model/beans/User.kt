@@ -11,14 +11,36 @@ data class User(
 ) : Serializable
 
 @DatabaseTable(tableName = "t_user")
-data class Data(
-    @DatabaseField(columnName = "balance") val balance: Double,
-    @DatabaseField(columnName = "discount") val discount: Int,
-    @DatabaseField(id = true) val id: Int,
-    @DatabaseField(columnName = "integral") val integral: Int,
-    @DatabaseField(columnName = "name") val name: String,
-    @DatabaseField(columnName = "phone") var phone: String
-) : Serializable
+class Data() : Serializable {
+    @DatabaseField(columnName = "balance")
+    var balance: Double = 0.0
+    @DatabaseField(columnName = "discount")
+    var discount: Int = 0
+    @DatabaseField(id = true)
+    var id: Int = 0
+    @DatabaseField(columnName = "integral")
+    var integral: Int = 0
+    @DatabaseField(columnName = "name")
+    var name: String = ""
+    @DatabaseField(columnName = "phone")
+    var phone: String = ""
+
+    constructor(
+        balance: Double,
+        discount: Int,
+        id: Int,
+        integral: Int,
+        name: String,
+        phone: String
+    ) : this() {
+        this.balance = balance
+        this.discount = discount
+        this.id = id
+        this.integral = integral
+        this.name = name
+        this.phone = phone
+    }
+}
 /*
 {
   "code": "0",

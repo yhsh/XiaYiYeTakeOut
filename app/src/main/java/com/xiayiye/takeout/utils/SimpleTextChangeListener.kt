@@ -1,13 +1,7 @@
-package com.xiayiye.takeout.model.dao
+package com.xiayiye.takeout.utils
 
-import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
-import com.j256.ormlite.support.ConnectionSource
-import com.j256.ormlite.table.TableUtils
-import com.xiayiye.takeout.model.beans.Data
-import com.xiayiye.takeout.model.beans.ReceiptAddressBean
-import com.xiayiye.takeout.model.beans.User
+import android.text.Editable
+import android.text.TextWatcher
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -38,26 +32,25 @@ import com.xiayiye.takeout.model.beans.User
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/6 18:09
+ * 创建时间：2020/3/11 12:54
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：XiaYiYeTakeOut
- * 文件包名：com.xiayiye.takeout.model.dao
- * 文件说明：
+ * 文件包名：com.xiayiye.takeout.utils
+ * 文件说明：空继承
  */
-class TakeOutOpenHelper(private val context: Context) :
-    OrmLiteSqliteOpenHelper(context, "takeout_kotlin.db", null, 2) {
-    override fun onCreate(p0: SQLiteDatabase?, p1: ConnectionSource?) {
-        //创建address表
-        TableUtils.createTable(p1, ReceiptAddressBean::class.java)
-        //创建user表
-        TableUtils.createTable(p1, Data::class.java)
+open class SimpleTextChangeListener : TextWatcher {
+    override fun afterTextChanged(p0: Editable?) {
+
     }
 
-    override fun onUpgrade(p0: SQLiteDatabase?, p1: ConnectionSource?, p2: Int, p3: Int) {
-        //创建address表
-        TableUtils.createTable(p1, ReceiptAddressBean::class.java)
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+    }
+
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
     }
 }

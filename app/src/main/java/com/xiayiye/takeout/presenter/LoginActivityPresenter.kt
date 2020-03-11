@@ -2,6 +2,7 @@ package com.xiayiye.takeout.presenter
 
 import android.widget.Toast
 import com.j256.ormlite.android.AndroidDatabaseConnection
+import com.xiayiye.takeout.model.beans.Data
 import com.xiayiye.takeout.model.beans.User
 import com.xiayiye.takeout.model.dao.TakeOutOpenHelper
 import com.xiayiye.takeout.ui.activity.LoginActivity
@@ -83,7 +84,7 @@ class LoginActivityPresenter(val loginActivity: LoginActivity) : NetPresenter() 
 
                 override fun onNext(user: User) {
                     LogTools.showLog("打印登陆数据", user.toString() + Thread.currentThread().name)
-                    loginSuccessData(user)
+                    loginSuccessData(user.data)
                 }
 
                 override fun onError(e: Throwable) {
@@ -92,7 +93,7 @@ class LoginActivityPresenter(val loginActivity: LoginActivity) : NetPresenter() 
             })
     }
 
-    private fun loginSuccessData(user: User) {
+    private fun loginSuccessData(user: Data) {
         //成功
         loginActivity.onSuccess(user)
         Toast.makeText(loginActivity, "登陆成功", Toast.LENGTH_SHORT).show()
@@ -101,7 +102,7 @@ class LoginActivityPresenter(val loginActivity: LoginActivity) : NetPresenter() 
         var startPoint: Savepoint? = null
         try {
             val takeOutOpenHelper = TakeOutOpenHelper(loginActivity)
-            val userDao = takeOutOpenHelper.getDao(User::class.java)
+            val userDao = takeOutOpenHelper.getDao(Data::class.java)
             //                    userDao.create(user)
             //创建或者更新用户信息
             //                    userDao.createOrUpdate(user)
@@ -113,7 +114,7 @@ class LoginActivityPresenter(val loginActivity: LoginActivity) : NetPresenter() 
             val queryForAll = userDao.queryForAll()
             var isOlderUser = false
             for (index in 0 until queryForAll.size) {
-                if (queryForAll.get(index).data.id == user.data.id) {
+                if (queryForAll.get(index).id == user.id) {
                     isOlderUser = true
                 }
             }

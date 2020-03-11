@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import cn.smssdk.EventHandler
 import cn.smssdk.SMSSDK
 import com.xiayiye.takeout.R
+import com.xiayiye.takeout.model.beans.Data
 import com.xiayiye.takeout.model.beans.User
 import com.xiayiye.takeout.presenter.LoginActivityPresenter
 import com.xiayiye.takeout.utils.LogTools
@@ -158,9 +159,9 @@ class LoginActivity : AppCompatActivity() {
         timer.cancel()
     }
 
-    fun onSuccess(user: User) {
+    fun onSuccess(user: Data) {
         val intent = Intent()
-        user.data.phone = loginPhone
+        user.phone = loginPhone
         intent.putExtra("user", user);
         setResult(666, intent)
         finish()

@@ -56,7 +56,7 @@ class ConfirmOrderActivity : AppCompatActivity() {
             startActivity(
                 Intent(
                     this,
-                    AddRecepitAddressActivity::class.java
+                    AddOrEditAddressActivity::class.java
                 )
             )
         }

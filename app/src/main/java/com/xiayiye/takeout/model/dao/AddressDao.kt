@@ -1,13 +1,8 @@
 package com.xiayiye.takeout.model.dao
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper
-import com.j256.ormlite.support.ConnectionSource
-import com.j256.ormlite.table.TableUtils
-import com.xiayiye.takeout.model.beans.Data
+import com.j256.ormlite.dao.Dao
 import com.xiayiye.takeout.model.beans.ReceiptAddressBean
-import com.xiayiye.takeout.model.beans.User
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -38,7 +33,7 @@ import com.xiayiye.takeout.model.beans.User
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/6 18:09
+ * 创建时间：2020/3/11 14:33
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
@@ -47,17 +42,57 @@ import com.xiayiye.takeout.model.beans.User
  * 文件包名：com.xiayiye.takeout.model.dao
  * 文件说明：
  */
-class TakeOutOpenHelper(private val context: Context) :
-    OrmLiteSqliteOpenHelper(context, "takeout_kotlin.db", null, 2) {
-    override fun onCreate(p0: SQLiteDatabase?, p1: ConnectionSource?) {
-        //创建address表
-        TableUtils.createTable(p1, ReceiptAddressBean::class.java)
-        //创建user表
-        TableUtils.createTable(p1, Data::class.java)
+class AddressDao(val context: Context) {
+    private var addressDao: Dao<ReceiptAddressBean, Int>
+
+    init {
+        val openHelper = TakeOutOpenHelper(context)
+        addressDao =
+            openHelper.getDao(ReceiptAddressBean::class.java)
     }
 
-    override fun onUpgrade(p0: SQLiteDatabase?, p1: ConnectionSource?, p2: Int, p3: Int) {
-        //创建address表
-        TableUtils.createTable(p1, ReceiptAddressBean::class.java)
+    /**
+     * 增加地址
+     */
+    fun addReceiptAddressBean(bean: ReceiptAddressBean) {
+        try {
+            addressDao.create(bean)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * 删除地址
+     */
+    fun deleteReceiptAddressBean(bean: ReceiptAddressBean) {
+        try {
+            addressDao.delete(bean)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * 修改地址
+     */
+    fun updateReceiptAddressBean(bean: ReceiptAddressBean) {
+        try {
+            addressDao.update(bean)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    /**
+     * 查找地址
+     */
+    fun queryAllAddress(): List<ReceiptAddressBean> {
+        try {
+            return addressDao.queryForAll()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return ArrayList<ReceiptAddressBean>()
     }
 }
