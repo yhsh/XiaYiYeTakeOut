@@ -1,9 +1,13 @@
 package com.xiayiye.takeout.presenter
 
+import android.util.Log
 import com.xiayiye.takeout.model.net.TakeOutService
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -47,7 +51,18 @@ open class NetPresenter() {
     var takeOutService: TakeOutService
 
     init {
+        val httpLoggingInterceptor =
+            HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message ->
+                Log.e("下一页网络日志", "XiaYiYe5:$message")
+            })
+        //四个等级
+//        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        val httpClient = OkHttpClient().newBuilder().addInterceptor(httpLoggingInterceptor)
+            .connectTimeout(30 * 1000, TimeUnit.MILLISECONDS)
+            .readTimeout(20 * 1000, TimeUnit.MILLISECONDS).build()
         val retrofit = Retrofit.Builder().baseUrl("https://getman.cn/mock/")
+            .client(httpClient)
             //增加 Gson 转换器
             .addConverterFactory(GsonConverterFactory.create())
             //增加RxJava适配工厂转换器
