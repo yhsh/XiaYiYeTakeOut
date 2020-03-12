@@ -262,6 +262,7 @@
         <activity android:name=".ui.activity.ReceiptAddressActivity" />
         <activity android:name=".ui.activity.AddOrEditAddressActivity" />
         <activity android:name=".ui.activity.LocationMapActivity" />
+        <activity android:name=".ui.activity.OrderDetailActivity" />
 
         <!--高德定位相关的服务-->
         <service android:name="com.amap.api.location.APSService" />

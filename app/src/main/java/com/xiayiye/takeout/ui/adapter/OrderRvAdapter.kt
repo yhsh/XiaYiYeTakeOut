@@ -1,6 +1,7 @@
 package com.xiayiye.takeout.ui.adapter
 
-import android.content.Context
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.OrderData
+import com.xiayiye.takeout.ui.activity.OrderDetailActivity
 import com.xiayiye.takeout.utils.LogTools
 import com.xiayiye.takeout.utils.OrderChangeFunction
 import org.json.JSONObject
@@ -51,8 +53,22 @@ import java.util.*
  * 文件包名：com.xiayiye.takeout.ui.adapter
  * 文件说明：订单观察者
  */
-class OrderRvAdapter(private val context: Context, private val orderList: List<OrderData>) :
+class OrderRvAdapter(private val context: Activity, private val orderList: List<OrderData>) :
     RecyclerView.Adapter<OrderRvAdapter.OrderViewHolder>(), Observer {
+    companion object {
+        fun getType(type: String): String {
+            return when (type) {
+                "10" -> "订单已提交"
+                "20" -> "商家已接单"
+                "30" -> "配送中"
+                "40" -> "已送达"
+                else -> {
+                    "订单错误"
+                }
+            }
+        }
+    }
+
     override fun update(p0: Observable?, pushKeyAndValue: Any?) {
         //观察者,拿到订单最新状态
         //解析json数据
@@ -99,6 +115,13 @@ class OrderRvAdapter(private val context: Context, private val orderList: List<O
         holder.tv_order_item_money.text = orderList.get(position).goodsInfo.get(0).newPrice
         holder.tvOrderItemType.text = getType(orderList.get(position).type)
         holder.tv_order_item_foods.text = orderList.get(position).goodsInfo[0].name
+        //设置点击事件
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, OrderDetailActivity::class.java)
+            intent.putExtra("orderId", orderList.get(position).id)
+            intent.putExtra("orderType", orderList.get(position).type)
+            context.startActivity(intent)
+        }
     }
 
     class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -114,18 +137,6 @@ class OrderRvAdapter(private val context: Context, private val orderList: List<O
             tv_order_item_money = itemView.findViewById<TextView>(R.id.tv_order_item_money)
             tvOrderItemType = itemView.findViewById<TextView>(R.id.tv_order_item_type)
             tv_order_item_foods = itemView.findViewById<TextView>(R.id.tv_order_item_foods)
-        }
-    }
-
-    private fun getType(type: String): String {
-        return when (type) {
-            "10" -> "订单已提交"
-            "20" -> "订单已完成"
-            "30" -> "订单已取消"
-            "40" -> "订单正在配送"
-            else -> {
-                "订单错误"
-            }
         }
     }
 }
