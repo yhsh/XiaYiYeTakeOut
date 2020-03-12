@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.xiayiye.takeout.R
+import com.xiayiye.takeout.model.beans.ReceiptAddressBean
 import kotlinx.android.synthetic.main.activity_confirm_order.*
 
 /*
@@ -53,13 +54,33 @@ class ConfirmOrderActivity : AppCompatActivity() {
 
     private fun initListener() {
         rl_location.setOnClickListener {
-            startActivity(
+            startActivityForResult(
                 Intent(
                     this,
-                    AddOrEditAddressActivity::class.java
-                )
+                    ReceiptAddressActivity::class.java
+                ), 777
             )
         }
         ib_back.setOnClickListener { finish() }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 777 && resultCode == 666) {
+            data?.let {
+                val selectAddress = it.getSerializableExtra("selectAddress") as ReceiptAddressBean
+                tv_address.text =
+                    StringBuffer(selectAddress.address).append(selectAddress.detailAddress)
+                tv_name.text = selectAddress.userName
+                tv_sex.text = selectAddress.sex
+                val phone = selectAddress.phone
+                val phoneOther = selectAddress.phoneOther
+                if (phoneOther.isNotEmpty()) {
+                    tv_phone.text = StringBuffer(phone).append(",").append(phoneOther)
+                } else {
+                    tv_phone.text = phone
+                }
+            }
+        }
     }
 }

@@ -1,14 +1,15 @@
-package com.xiayiye.takeout.ui.activity
+package com.xiayiye.takeout.ui.adapter
 
+import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.amap.api.services.core.PoiItem
 import com.xiayiye.takeout.R
-import com.xiayiye.takeout.model.beans.ReceiptAddressBean
-import com.xiayiye.takeout.model.dao.AddressDao
-import com.xiayiye.takeout.ui.adapter.AddressRvAdapter
-import kotlinx.android.synthetic.main.activity_address_list.*
+import java.util.*
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -39,35 +40,43 @@ import kotlinx.android.synthetic.main.activity_address_list.*
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/3/10 21:33
+ * 创建时间：2020/3/12 15:30
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：XiaYiYeTakeOut
- * 文件包名：com.xiayiye.takeout.ui.activity
- * 文件说明：收货地址列表
+ * 文件包名：com.xiayiye.takeout.ui.adapter
+ * 文件说明：
  */
-class ReceiptAddressActivity : AppCompatActivity() {
-    var addressDao = AddressDao(this)
-    private lateinit var queryAllAddress: List<ReceiptAddressBean>
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_address_list)
-        initListener()
+class AroundRvAdapter(private val activity: Activity, private val poiItem: ArrayList<PoiItem>) :
+    RecyclerView.Adapter<AroundRvAdapter.AroundViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AroundViewHolder {
+        val aroundView = LayoutInflater.from(parent.context).inflate(
+            R.layout.item_around_address, parent, false
+        )
+        return AroundViewHolder(aroundView)
     }
 
-    override fun onStart() {
-        super.onStart()
-        queryAllAddress = addressDao.queryAllAddress()
-        rv_receipt_address.layoutManager = LinearLayoutManager(this)
-        rv_receipt_address.adapter = AddressRvAdapter(this, queryAllAddress)
-    }
+    override fun getItemCount(): Int = poiItem.size
 
-    private fun initListener() {
-        tv_add_address.setOnClickListener {
-            startActivity(Intent(this, AddOrEditAddressActivity::class.java))
+    override fun onBindViewHolder(holder: AroundViewHolder, position: Int) {
+        holder.bindView(poiItem[position])
+        holder.itemView.setOnClickListener {
+            val intent = Intent()
+            intent.putExtra("title", poiItem[position].title)
+            intent.putExtra("snippet", poiItem[position].snippet)
+            activity.setResult(999, intent)
+            activity.finish()
         }
-        ib_back.setOnClickListener { finish() }
+    }
+
+    class AroundViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvTitle = itemView.findViewById<TextView>(R.id.tv_title)
+        private val tvAddress = itemView.findViewById<TextView>(R.id.tv_address)
+        fun bindView(poiItem: PoiItem) {
+            tvTitle.text = poiItem.title
+            tvAddress.text = poiItem.snippet
+        }
     }
 }

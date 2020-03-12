@@ -111,6 +111,10 @@ class AddOrEditAddressActivity : AppCompatActivity() {
         ib_add_phone_other.setOnClickListener { rl_phone_other.visibility = View.VISIBLE }
         ib_select_label.setOnClickListener { selectLabel() }
         btn_ok.setOnClickListener { clickOk(isUpdateOrDelete) }
+        btn_location_address.setOnClickListener {
+            val intent = Intent(this, LocationMapActivity::class.java)
+            startActivityForResult(intent, 888)
+        }
         et_phone.addTextChangedListener(object : SimpleTextChangeListener() {
             override fun afterTextChanged(p0: Editable?) {
                 //显示删除按钮
@@ -214,7 +218,6 @@ class AddOrEditAddressActivity : AppCompatActivity() {
             addressDao.deleteReceiptAddressBean(addressBean)
         }
         toast("新增地址成功了")
-        startActivity(Intent(this, ReceiptAddressActivity::class.java))
         finish()
     }
 
@@ -249,5 +252,17 @@ class AddOrEditAddressActivity : AppCompatActivity() {
             tv_label.setBackgroundColor(Color.parseColor(tittleColor[switch]))
             tv_label.setTextColor(Color.WHITE)
         }.show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == 999 && requestCode == 888) {
+            data?.let {
+                val title = it.getStringExtra("title")
+                val snippet = it.getStringExtra("snippet")
+                et_receipt_address.setText(title)
+                et_detail_address.setText(snippet)
+            }
+        }
     }
 }

@@ -39,6 +39,38 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!--地图SDK（包含其搜索功能）需要的基础权限-->
+    <!--允许程序打开网络套接字-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--允许程序设置内置sd卡的写权限-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--允许程序获取网络状态-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--允许程序访问WiFi网络信息-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--允许程序读写手机状态和身份-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--允许程序访问CellID或WiFi热点来获取粗略的位置-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--用于获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!--用于访问网络，网络定位需要上网-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!--用于读取手机当前的状态-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--用于写入缓存数据到扩展存储卡-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--用于申请调用A-GPS模块-->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
     <application
         android:name=".utils.TakeOutApplication"
         android:allowBackup="true"
@@ -229,6 +261,10 @@
         <activity android:name=".ui.activity.ConfirmOrderActivity" />
         <activity android:name=".ui.activity.ReceiptAddressActivity" />
         <activity android:name=".ui.activity.AddOrEditAddressActivity" />
+        <activity android:name=".ui.activity.LocationMapActivity" />
+
+        <!--高德定位相关的服务-->
+        <service android:name="com.amap.api.location.APSService" />
 
         <!-- Required. For publish channel feature -->
         <!-- JPUSH_CHANNEL 是为了方便开发者统计 APK 分发渠道。-->
@@ -251,6 +287,10 @@
         <meta-data
             android:name="Mob-AppSecret"
             android:value="769f4a9e69f37c94085ff5b0447cd9a6" />
+        <!--高德地图开发者申请的key-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="f01b288f2dbf2189670908d35bd14dea" />
     </application>
 
 </manifest>

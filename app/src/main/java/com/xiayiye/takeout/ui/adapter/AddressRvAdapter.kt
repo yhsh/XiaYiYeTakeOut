@@ -1,5 +1,6 @@
 package com.xiayiye.takeout.ui.adapter
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.text.TextUtils
@@ -12,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.xiayiye.takeout.R
 import com.xiayiye.takeout.model.beans.ReceiptAddressBean
 import com.xiayiye.takeout.ui.activity.AddOrEditAddressActivity
-import org.jetbrains.anko.startActivity
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -52,7 +52,10 @@ import org.jetbrains.anko.startActivity
  * 文件包名：com.xiayiye.takeout.ui.adapter
  * 文件说明：
  */
-class AddressRvAdapter(val queryAllAddress: List<ReceiptAddressBean>) :
+class AddressRvAdapter(
+    private val activity: Activity,
+    private val queryAllAddress: List<ReceiptAddressBean>
+) :
     RecyclerView.Adapter<AddressRvAdapter.AddressViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddressViewHolder {
         val addressView = LayoutInflater.from(parent.context).inflate(
@@ -65,6 +68,13 @@ class AddressRvAdapter(val queryAllAddress: List<ReceiptAddressBean>) :
 
     override fun onBindViewHolder(holder: AddressViewHolder, position: Int) {
         holder.bindView(queryAllAddress[position])
+        //设置点击事件
+        holder.itemView.setOnClickListener {
+            val intent = Intent()
+            intent.putExtra("selectAddress", queryAllAddress[position])
+            activity.setResult(666, intent)
+            activity.finish()
+        }
     }
 
     class AddressViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
